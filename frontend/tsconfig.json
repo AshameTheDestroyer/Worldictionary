@@ -1,0 +1,25 @@
+{
+    "files": [],
+    "compilerOptions": {
+        "strict": true,
+        "allowJs": true,
+        "jsx": "preserve",
+        "target": "es2021",
+        "outDir": "./dist",
+        "rootDir": "./src/",
+        "module": "commonjs",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "preserveConstEnums": true,
+        "forceConsistentCasingInFileNames": true,
+    },
+    "references": [
+        {
+            "path": "./tsconfig.app.json"
+        },
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
+}
