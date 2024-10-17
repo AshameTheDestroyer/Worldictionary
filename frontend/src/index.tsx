@@ -3,6 +3,8 @@ import { Home } from "./pages/Home";
 import ReactDOM from "react-dom/client";
 import { HashRouter, Route, Routes } from "react-router-dom";
 
+import "@/_extensions";
+
 import "./index.css";
 
 const ROOT_DIV_ELEMENT: HTMLElement | null = document.querySelector("#root");
