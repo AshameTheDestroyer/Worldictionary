@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
+import { HTTP } from "../../_services";
 
 export const Home: FC = () => {
-    const [authenticationState, setAuthenticationState] = useState<
-        "signup" | "login"
-    >("signup");
+    const [authenticationState, setAuthenticationState] = useState<"signup" | "login">("signup");
 
     const [signupData, setSignupData] = useState<{
         name: string;
@@ -26,21 +25,11 @@ export const Home: FC = () => {
     function OnFormSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        fetch(
-            `${import.meta.env["VITE_BACKEND_URL"]}/authentication/${authenticationState}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(
-                    authenticationState == "signup"
-                        ? { ...signupData, role: "admin" }
-                        : loginData,
-                ),
-            },
+        HTTP.post(
+            `/authentication/${authenticationState}`,
+            authenticationState == "signup" ? { ...signupData, role: "admin" } : loginData,
         )
-            .then((response) => response.json())
+            .then((response) => response.data)
             .then(console.log)
             .catch(console.error);
     }
@@ -91,9 +80,7 @@ export const Home: FC = () => {
                     <a
                         className="underline"
                         href="./"
-                        onClick={(e) => (
-                            e.preventDefault(), setAuthenticationState("login")
-                        )}
+                        onClick={(e) => (e.preventDefault(), setAuthenticationState("login"))}
                     >
                         Login instead.
                     </a>
@@ -127,9 +114,7 @@ export const Home: FC = () => {
                     <a
                         className="underline"
                         href="./"
-                        onClick={(e) => (
-                            e.preventDefault(), setAuthenticationState("signup")
-                        )}
+                        onClick={(e) => (e.preventDefault(), setAuthenticationState("signup"))}
                     >
                         Signup instead.
                     </a>
