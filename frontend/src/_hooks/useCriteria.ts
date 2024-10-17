@@ -27,7 +27,7 @@ export function useCriteria<TTotalRowCount extends number | undefined = undefine
     totalRowCount?: TTotalRowCount,
 ): CriteriaReturnType<TTotalRowCount> {
     const Navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, _setSearchParams] = useSearchParams();
 
     function GetParameters() {
         return {
