@@ -1,18 +1,24 @@
 {
     "files": [],
     "compilerOptions": {
+        "baseUrl": "./",
         "strict": true,
         "allowJs": true,
         "jsx": "preserve",
+        "rootDir": "./src",
         "target": "es2021",
         "outDir": "./dist",
-        "rootDir": "./src/",
         "module": "commonjs",
         "skipLibCheck": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
         "preserveConstEnums": true,
         "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
     },
     "references": [
         {
