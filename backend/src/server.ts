@@ -2,7 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import { TaskRouter } from "./routes/tasks";
+import { UserRouter } from "./services/user";
 
 dotenv.config();
 
@@ -23,7 +23,7 @@ async function ConnectDB() {
 
 ConnectDB();
 
-app.use("/api/tasks", TaskRouter);
+app.use(UserRouter);
 
 app.listen(Number(process.env.PORT), () => {
     console.log(`Server running on port ${process.env.PORT}`);

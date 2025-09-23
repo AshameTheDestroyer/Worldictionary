@@ -5,14 +5,20 @@ export enum Gender {
     female = "female",
 }
 
+export enum Role {
+    user = "user",
+    admin = "admin",
+}
+
 export const UserSchema = z.object({
     email: z.email("required"),
     birthday: z.date().optional(),
+    role: z.enum(Role, "required"),
     gender: z.enum(Gender, "required"),
     username: z
         .string("required")
         .min(4, "minimum")
-        .max(16, "maximum")
+        .max(20, "maximum")
         .regex(/^@[a-zA-Z]+$/, "pattern"),
     "first-name": z
         .string("required")

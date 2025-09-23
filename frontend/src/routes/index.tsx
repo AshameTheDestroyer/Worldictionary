@@ -8,9 +8,9 @@ export const Route = createFileRoute("/")({
 
 function Index() {
     const { data } = useQuery({
-        queryKey: ["tasks"],
+        queryKey: ["users"],
         queryFn: () =>
-            HTTPManager.get("api/tasks").then((response) => response.data),
+            HTTPManager.get("api/users").then((response) => response.data),
     });
 
     return <div>{JSON.stringify(data)}</div>;
