@@ -10,7 +10,7 @@ function Index() {
     const { data } = useQuery({
         queryKey: ["users"],
         queryFn: () =>
-            HTTPManager.get("api/users").then((response) => response.data),
+            HTTPManager.get("users").then((response) => response.data),
     });
 
     return <div>{JSON.stringify(data)}</div>;

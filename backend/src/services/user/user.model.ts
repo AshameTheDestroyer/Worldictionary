@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
 import { LooseRecord } from "../../../../src/types";
 import {
-    Gender,
     Role,
+    Gender,
     UserDTO,
     UserSchema,
 } from "../../../../src/schemas/UserSchema";
@@ -25,11 +25,12 @@ export const UserDBSchema = new Schema(
     {
         autoIndex: false,
         timestamps: true,
-        versionKey: false,
     }
 );
 
 export const UserModel = model("User", UserDBSchema);
+
+UserModel.createIndexes();
 
 UserModel.prependListener("save", (user, next) =>
     UserSchema.parseAsync(user).then(next)
