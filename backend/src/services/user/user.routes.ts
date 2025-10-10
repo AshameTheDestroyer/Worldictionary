@@ -9,6 +9,7 @@ import {
     GetUsers,
     PostUser,
     PatchUser,
+    GetMyUser,
     DeleteUser,
     GetUserByID,
     DeleteAllUsers,
@@ -31,6 +32,13 @@ UserRouter.get(
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
     GetUserByID
+);
+
+UserRouter.get(
+    `${USER_ROUTE}/mine`,
+    ValidateAuthenticity,
+    ValidateRateLimit(),
+    GetMyUser
 );
 
 UserRouter.post(
