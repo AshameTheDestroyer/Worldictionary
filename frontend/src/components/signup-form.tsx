@@ -1,10 +1,26 @@
+import * as z from "zod";
+import { cn } from "@/utils/cn";
+import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
 import { FC, useImperativeHandle } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Gender } from "../../../src/schemas/UserSchema";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
+import { SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from "./ui/input-group";
+import {
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+} from "./ui/dropdown-menu";
 import {
     TagIcon,
     LockIcon,
@@ -13,27 +29,26 @@ import {
     UserIcon,
     VenusAndMarsIcon,
 } from "lucide-react";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Gender } from "../../../src/schemas/UserSchema";
-import { cn } from "@/utils/cn";
+
+export const SignupFormSchema = z.intersection(
+    SignupSchema,
+    z.object({ "confirm-password": z.string() })
+);
+
+export type SignupFormDTO = z.infer<typeof SignupFormSchema>;
 
 export type SignupFormProps = {
-    ref?: React.Ref<UseFormReturn<SignupDTO>>;
+    ref?: React.Ref<UseFormReturn<SignupFormDTO>>;
 };
 
 export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
     const form = useForm({
-        resolver: zodResolver(SignupSchema),
+        resolver: zodResolver(SignupFormSchema),
     });
 
     useImperativeHandle(ref, () => form);
+
+    console.log(form?.getValues("username"));
 
     return (
         <Form
@@ -49,9 +64,12 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                             <FormLabel>Username</FormLabel>
                             <FormControl>
                                 <InputGroup>
+                                    <InputGroupText className="ml-2 -mr-1 translate-y-0.25">
+                                        @
+                                    </InputGroupText>
                                     <InputGroupInput
                                         type="text"
-                                        placeholder="@username"
+                                        placeholder="username"
                                         {...field}
                                     />
                                     <InputGroupAddon>
@@ -96,6 +114,28 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                                     <InputGroupInput
                                         type="password"
                                         placeholder="P@$$w0rd"
+                                        {...field}
+                                    />
+                                    <InputGroupAddon>
+                                        <LockIcon />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="confirm-password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                                <InputGroup>
+                                    <InputGroupInput
+                                        type="password"
+                                        placeholder="C0nf!r^^_P@$$w0rd"
                                         {...field}
                                     />
                                     <InputGroupAddon>
