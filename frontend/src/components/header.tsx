@@ -2,7 +2,7 @@ import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
 
 export type HeaderProps = {
@@ -11,6 +11,8 @@ export type HeaderProps = {
 };
 
 export const Header: FC<HeaderProps> = ({ id, className }) => {
+    const { pathname } = useLocation();
+
     return (
         <header
             id={id}
@@ -19,17 +21,19 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                 className
             )}
         >
-            <HistoryBreadcrumb className="w-screen " />
+            <HistoryBreadcrumb className="w-screen" />
             <h1 className="text-3xl font-bold">Worldictionary</h1>
             <div className="flex gap-4 flex-1 place-content-end">
-                <div className="flex gap-2">
-                    <Link to="/registration" search={{ mode: "signup" }}>
-                        <Button variant="secondary">Sign up</Button>
-                    </Link>
-                    <Link to="/registration" search={{ mode: "login" }}>
-                        <Button>Login</Button>
-                    </Link>
-                </div>
+                {!pathname.startsWith("/registration") && (
+                    <div className="flex gap-2">
+                        <Link to="/registration" search={{ mode: "signup" }}>
+                            <Button variant="secondary">Sign up</Button>
+                        </Link>
+                        <Link to="/registration" search={{ mode: "login" }}>
+                            <Button>Login</Button>
+                        </Link>
+                    </div>
+                )}
                 <ModeToggle />
             </div>
         </header>
