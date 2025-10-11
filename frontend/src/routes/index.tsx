@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { HTTPManager } from "../managers/HTTPManager";
+import { ModeToggle } from "@/components/mode-toggle";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -7,11 +6,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-    const { data } = useQuery({
-        queryKey: ["users"],
-        queryFn: () =>
-            HTTPManager.get("users").then((response) => response.data),
-    });
-
-    return <div>{JSON.stringify(data)}</div>;
+    return (
+        <div className="p-8">
+            <header className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Worldictionary</h1>
+                <ModeToggle />
+            </header>
+        </div>
+    );
 }
