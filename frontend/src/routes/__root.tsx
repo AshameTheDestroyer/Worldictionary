@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -11,8 +12,11 @@ export const Route = createRootRoute({
 function RootLayout() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Outlet />
             <TanStackRouterDevtools />
+            <main className="p-8 min-h-screen bg-gradient-to-b from-white dark:from-black via-emerald-500 from-25% via-90% dark:to-emerald-200 to-emerald-700">
+                <Header />
+                <Outlet />
+            </main>
         </QueryClientProvider>
     );
 }
