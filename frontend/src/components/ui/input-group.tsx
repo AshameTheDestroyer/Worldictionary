@@ -26,6 +26,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
                 // Error state.
                 "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
 
+                "dark:border-white/30 border-black/30",
                 className
             )}
             {...props}
