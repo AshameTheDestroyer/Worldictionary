@@ -24,8 +24,8 @@ function RouteComponent() {
     const { mode } = Route.useSearch();
 
     return (
-        <main>
-            <Card>
+        <main className="flex-1 flex place-content-center place-items-center">
+            <Card className="max-w-[30rem]">
                 <CardHeader>
                     <CardTitle className="text-2xl">
                         {

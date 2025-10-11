@@ -17,7 +17,7 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
         <header
             id={id}
             className={cn(
-                "flex justify-between flex-wrap-reverse items-center gap-4 -m-8 mb-auto p-8",
+                "flex justify-between flex-wrap-reverse items-center gap-4 -m-8 mb-0 p-8",
                 className
             )}
         >
