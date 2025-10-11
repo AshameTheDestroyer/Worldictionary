@@ -1,15 +1,21 @@
-import { FC } from "react";
-import { useForm } from "react-hook-form";
 import { LockIcon, MailIcon } from "lucide-react";
+import { FC, Ref, useImperativeHandle } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "../../../src/schemas/LoginSchema";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { LoginDTO, LoginSchema } from "../../../src/schemas/LoginSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 
-export const LoginForm: FC = () => {
+export type LoginFormProps = {
+    ref?: Ref<UseFormReturn<LoginDTO>>;
+};
+
+export const LoginForm: FC<LoginFormProps> = ({ ref }) => {
     const form = useForm({
         resolver: zodResolver(LoginSchema),
     });
+
+    useImperativeHandle(ref, () => form);
 
     return (
         <Form className="flex flex-col gap-4" {...form}>

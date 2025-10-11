@@ -1,20 +1,45 @@
-import { FC } from "react";
-import { useForm } from "react-hook-form";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
+import { FC, useImperativeHandle } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignupSchema } from "../../../src/schemas/SignupSchema";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
-import { TagIcon, LockIcon, MailIcon, TagsIcon, UserIcon } from "lucide-react";
+import {
+    TagIcon,
+    LockIcon,
+    MailIcon,
+    TagsIcon,
+    UserIcon,
+    VenusAndMarsIcon,
+} from "lucide-react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { Gender } from "../../../src/schemas/UserSchema";
+import { cn } from "@/utils/cn";
 
-export const SignupForm: FC = () => {
+export type SignupFormProps = {
+    ref?: React.Ref<UseFormReturn<SignupDTO>>;
+};
+
+export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
     const form = useForm({
         resolver: zodResolver(SignupSchema),
     });
 
+    useImperativeHandle(ref, () => form);
+
     return (
-        <Form className="flex gap-4 flex-1 max-md:flex-col" {...form}>
+        <Form
+            className="grid grid-cols-[1fr_auto_1fr] gap-4 max-md:flex flex-1 max-md:flex-col"
+            {...form}
+        >
             <div className="flex flex-col gap-4 flex-1">
                 <FormField
                     control={form.control}
@@ -147,6 +172,52 @@ export const SignupForm: FC = () => {
                                     })
                                 }
                             />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Gender</FormLabel>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        className={cn(
+                                            "bg-transparent! place-content-start!",
+                                            field.value == null &&
+                                                "text-muted-foreground!"
+                                        )}
+                                        variant="outline"
+                                    >
+                                        <VenusAndMarsIcon />
+                                        <p>
+                                            {field.value
+                                                ?.charAt(0)
+                                                .toUpperCase() +
+                                                field.value?.slice(1) ||
+                                                "Select your gender"}
+                                        </p>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    {Object.values(Gender).map((value, i) => (
+                                        <DropdownMenuItem
+                                            key={i}
+                                            onClick={() =>
+                                                field.onChange({
+                                                    target: { value },
+                                                })
+                                            }
+                                        >
+                                            {value.charAt(0).toUpperCase() +
+                                                value.slice(1)}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </FormItem>
                     )}
                 />

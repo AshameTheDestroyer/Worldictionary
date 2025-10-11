@@ -14,7 +14,7 @@ export const DatePicker: FC<DatePickerProps> = ({ date, setDate }) => {
     return (
         <Popover>
             <PopoverTrigger
-                className="dark:border-white/30 border-black/30 bg-transparent hover:bg-transparent"
+                className="dark:border-white/30 border-black/30 bg-transparent! hover:bg-transparent"
                 asChild
             >
                 <Button
