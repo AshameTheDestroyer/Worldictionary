@@ -25,7 +25,7 @@ function RouteComponent() {
 
     return (
         <main className="flex-1 flex place-content-center place-items-center">
-            <Card className="max-w-[30rem]">
+            <Card className="py-12 px-4 gap-8">
                 <CardHeader>
                     <CardTitle className="text-2xl">
                         {
@@ -36,7 +36,7 @@ function RouteComponent() {
                         }
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex gap-4 h-full items-stretch">
                     {
                         {
                             login: <LoginForm />,
@@ -45,13 +45,13 @@ function RouteComponent() {
                     }
                 </CardContent>
 
-                <CardFooter className="flex flex-col gap-4">
+                <CardFooter className="flex flex-col gap-8">
                     <Separator />
                     {
                         {
                             login: (
-                                <div className="flex gap-[1ch]">
-                                    <p>Doesn't have an account?</p>
+                                <div>
+                                    <span>Doesn't have an account?</span>{" "}
                                     <Link
                                         className="underline"
                                         to="/registration"
@@ -62,8 +62,8 @@ function RouteComponent() {
                                 </div>
                             ),
                             signup: (
-                                <div className="flex gap-[1ch]">
-                                    <p>Already have an account?</p>
+                                <div>
+                                    <span>Already have an account?</span>{" "}
                                     <Link
                                         className="underline"
                                         to="/registration"
