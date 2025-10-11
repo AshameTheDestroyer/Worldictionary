@@ -13,9 +13,31 @@ import {
     type FieldPath,
     type FieldValues,
     type ControllerProps,
+    type FormProviderProps,
 } from "react-hook-form";
 
-const Form = FormProvider;
+type FormProps<
+    TFieldValues extends FieldValues,
+    TContext = any,
+    TTransformedValues = TFieldValues,
+> = FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
+    id?: string;
+    className?: string;
+};
+
+const Form = <
+    TFieldValues extends FieldValues,
+    TContext = any,
+    TTransformedValues = TFieldValues,
+>(
+    props: FormProps<TFieldValues, TContext, TTransformedValues>
+): ReturnType<React.FC> => {
+    return (
+        <form {...props}>
+            <FormProvider {...props} />
+        </form>
+    );
+};
 
 type FormFieldContextValue<
     TFieldValues extends FieldValues = FieldValues,
@@ -160,6 +182,7 @@ export {
     Form,
     FormItem,
     FormLabel,
+    FormProps,
     FormControl,
     FormDescription,
     FormMessage,
