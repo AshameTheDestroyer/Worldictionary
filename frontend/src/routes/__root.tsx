@@ -1,5 +1,8 @@
+import { Toaster } from "react-hot-toast";
 import { Header } from "@/components/header";
+import { useTheme } from "@/components/theme-provider";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { useScreenSize } from "@/components/screen-size-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -10,6 +13,9 @@ export const Route = createRootRoute({
 });
 
 function RootLayout() {
+    const { isDarkTheme } = useTheme();
+    const { isScreenSize } = useScreenSize();
+
     return (
         <QueryClientProvider client={queryClient}>
             <TanStackRouterDevtools />
@@ -17,6 +23,28 @@ function RootLayout() {
                 <Header />
                 <Outlet />
             </main>
+            <Toaster
+                position={
+                    isScreenSize["max-sm"] ? "bottom-center" : "bottom-right"
+                }
+                toastOptions={{
+                    duration: 5000,
+                    removeDelay: 1000,
+                    style: {
+                        color: isDarkTheme ? "white" : "black",
+                        backgroundColor: isDarkTheme ? "black" : "white",
+                    },
+                    error: {
+                        position: "top-center",
+                    },
+                    success: {
+                        position: "top-center",
+                    },
+                    loading: {
+                        position: "top-center",
+                    },
+                }}
+            />
         </QueryClientProvider>
     );
 }

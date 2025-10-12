@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./components/theme-provider";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { ScreenSizeProvider } from "./components/screen-size-provider";
 
 import "./global.css";
 
@@ -18,7 +19,9 @@ if (ROOT_ELEMENT.innerHTML != null) {
     const root = ReactDOM.createRoot(ROOT_ELEMENT);
     root.render(
         <ThemeProvider defaultTheme="system" storageKey="worldictionary-theme">
-            <RouterProvider router={router} />
+            <ScreenSizeProvider>
+                <RouterProvider router={router} />
+            </ScreenSizeProvider>
         </ThemeProvider>
     );
 }

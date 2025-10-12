@@ -1,9 +1,9 @@
 import {
+    useState,
+    useEffect,
+    useContext,
     createContext,
     PropsWithChildren,
-    useContext,
-    useEffect,
-    useState,
 } from "react";
 
 export type Theme = "dark" | "light" | "system";
@@ -15,11 +15,16 @@ export type ThemeProviderProps = PropsWithChildren<{
 
 export type ThemeProviderState = {
     theme: Theme;
+    isDarkTheme: boolean;
     setTheme: (theme: Theme) => void;
 };
 
 const initialState: ThemeProviderState = {
     theme: "system",
+    isDarkTheme:
+        typeof window !== "undefined"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+            : false,
     setTheme: () => null,
 };
 
@@ -40,7 +45,7 @@ export function ThemeProvider({
 
         root.classList.remove("light", "dark");
 
-        if (theme === "system") {
+        if (theme == "system") {
             const systemTheme = window.matchMedia(
                 "(prefers-color-scheme: dark)"
             ).matches
@@ -56,6 +61,11 @@ export function ThemeProvider({
 
     const value = {
         theme,
+        isDarkTheme:
+            theme == "dark" ||
+            (theme == "system" &&
+                typeof window !== "undefined" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches),
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme);
             setTheme(theme);

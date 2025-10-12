@@ -1,13 +1,16 @@
 import * as z from "zod";
 import { cn } from "@/utils/cn";
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
+import { useMutation } from "@tanstack/react-query";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../src/schemas/UserSchema";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { FC, useImperativeHandle, useState } from "react";
-import { SignupSchema } from "../../../src/schemas/SignupSchema";
+import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormItem, FormField, FormLabel, FormControl } from "./ui/form";
 import {
     InputGroup,
@@ -61,11 +64,22 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
 
     useImperativeHandle(ref, () => form);
 
+    const { mutate } = useMutation({
+        mutationFn: (data: SignupDTO) =>
+            HTTPManager.post("registration/signup", data)
+                .then((response) => response.data)
+                .catch((error) => toast.error(`${error}`)),
+    });
+
+    function HandleSubmit(data: SignupFormDTO) {
+        mutate(data);
+    }
+
     return (
         <Form
             id="registration-form"
             className="grid grid-cols-[1fr_auto_1fr] gap-4 max-md:flex flex-1 max-md:flex-col"
-            SubmitFn={(data) => console.log(data)}
+            SubmitFn={HandleSubmit}
             {...form}
         >
             <div className="flex flex-col gap-4 flex-1">
@@ -73,25 +87,25 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                     control={form.control}
                     name="username"
                     render={({ field }) => (
-                            <FormItem>
-                                <FormLabel aria-required>
-                                    Username
-                                    <span className="text-emerald-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                    <InputGroup>
-                                        <InputGroupText className="ml-2 -mr-1 translate-y-0.25">
-                                            @
-                                        </InputGroupText>
-                                        <InputGroupInput
-                                            type="text"
-                                            placeholder="username"
-                                            {...field}
-                                            value={
-                                                field.value?.startsWith("@")
-                                                    ? field.value.slice(1)
-                                                    : field.value || ""
-                                            }
+                        <FormItem>
+                            <FormLabel aria-required>
+                                Username
+                                <span className="text-emerald-500">*</span>
+                            </FormLabel>
+                            <FormControl>
+                                <InputGroup>
+                                    <InputGroupText className="ml-2 -mr-1 translate-y-0.25">
+                                        @
+                                    </InputGroupText>
+                                    <InputGroupInput
+                                        type="text"
+                                        placeholder="username"
+                                        {...field}
+                                        value={
+                                            field.value?.startsWith("@")
+                                                ? field.value.slice(1)
+                                                : field.value || ""
+                                        }
                                         onChange={(
                                             e: React.ChangeEvent<HTMLInputElement>
                                         ) =>
@@ -108,15 +122,14 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                                                 },
                                             })
                                         }
-                                        />
-                                        <InputGroupAddon>
-                                            <UserIcon />
-                                        </InputGroupAddon>
-                                    </InputGroup>
-                                </FormControl>
-                            </FormItem>
-                        );
-                    }}
+                                    />
+                                    <InputGroupAddon>
+                                        <UserIcon />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
 
                 <FormField
