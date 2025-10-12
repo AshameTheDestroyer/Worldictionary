@@ -323,7 +323,11 @@ export const SignupForm: FC = () => {
                                 <FormLabel>Birthday</FormLabel>
                                 <div className="[&>*]:w-full">
                                     <DatePicker
-                                        date={field.value}
+                                        date={
+                                            typeof field.value == "string"
+                                                ? new Date(field.value)
+                                                : (field.value as Date)
+                                        }
                                         setDate={(date) =>
                                             field.onChange({
                                                 target: { value: date },
@@ -410,8 +414,8 @@ export const SignupForm: FC = () => {
                 </Button>
                 <Button
                     type="submit"
-                    form="registration-form"
                     disabled={isPending}
+                    form="registration-form"
                 >
                     {isPending && <Spinner />}
                     Signup

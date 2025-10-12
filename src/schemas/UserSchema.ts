@@ -12,10 +12,10 @@ export enum Role {
 
 export const UserSchema = z.object({
     email: z.email("required"),
-    birthday: z.date().optional(),
     role: z.enum(Role, "required"),
     password: z.string("required"),
     gender: z.enum(Gender, "required"),
+    birthday: z.coerce.date().optional(),
     username: z
         .string("required")
         .min(4, "minimum")
