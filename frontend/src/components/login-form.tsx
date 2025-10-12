@@ -1,9 +1,14 @@
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { FC, useState } from "react";
+import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "../../../src/schemas/LoginSchema";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
+import { LoginDTO, LoginSchema } from "../../../src/schemas/LoginSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
     InputGroup,
@@ -17,11 +22,32 @@ export const LoginForm: FC = () => {
         resolver: zodResolver(LoginSchema),
     });
 
+    const Navigate = useNavigate();
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: (data: LoginDTO) =>
+            HTTPManager.post("registration/login", data)
+                .then((response) => response.data)
+                .then((_data) => {
+                    toast.success("Successfully logged in!");
+                    Navigate({ to: "/" });
+                })
+                .catch((error) =>
+                    toast.error(
+                        error?.response?.data?.message ?? error?.message
+                    )
+                ),
+    });
+
+    function HandleSubmit(data: LoginDTO) {
+        mutate(data);
+    }
+
     return (
         <Form
             id="registration-form"
             className="flex flex-col gap-8"
-            SubmitFn={(data) => console.log(data)}
+            SubmitFn={HandleSubmit}
             {...form}
         >
             <main className="flex flex-col gap-4">
@@ -104,7 +130,12 @@ export const LoginForm: FC = () => {
                 >
                     Clear
                 </Button>
-                <Button type="submit" form="registration-form">
+                <Button
+                    type="submit"
+                    disabled={isPending}
+                    form="registration-form"
+                >
+                    {isPending && <Spinner />}
                     Login
                 </Button>
             </div>
