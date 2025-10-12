@@ -3,10 +3,12 @@ import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { FC, useState } from "react";
+import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../src/schemas/UserSchema";
@@ -58,10 +60,19 @@ export const SignupForm: FC = () => {
         resolver: zodResolver(SignupFormSchema),
     });
 
-    const { mutate } = useMutation({
+    const Navigate = useNavigate();
+
+    const { mutate, isPending } = useMutation({
         mutationFn: (data: SignupDTO) =>
             HTTPManager.post("registration/signup", data)
                 .then((response) => response.data)
+                .then((_data) => {
+                    toast.success("Successfully signed up!");
+                    Navigate({
+                        to: "/registration",
+                        search: { mode: "login" },
+                    });
+                })
                 .catch((error) =>
                     toast.error(
                         error?.response?.data?.message ?? error?.message
@@ -397,7 +408,12 @@ export const SignupForm: FC = () => {
                 >
                     Clear
                 </Button>
-                <Button type="submit" form="registration-form">
+                <Button
+                    type="submit"
+                    form="registration-form"
+                    disabled={isPending}
+                >
+                    {isPending && <Spinner />}
                     Signup
                 </Button>
             </div>
