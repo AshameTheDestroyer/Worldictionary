@@ -72,22 +72,7 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                 <FormField
                     control={form.control}
                     name="username"
-                    render={({ field }) => {
-                        // Ensure the value always starts with "@"
-                        const handleChange = (
-                            e: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                            let value = e.target.value;
-                            if (!value.startsWith("@")) {
-                                value = "@" + value.replace(/^@+/, "");
-                            }
-                            field.onChange({
-                                ...e,
-                                target: { ...e.target, value },
-                            });
-                        };
-
-                        return (
+                    render={({ field }) => (
                             <FormItem>
                                 <FormLabel aria-required>
                                     Username
@@ -107,7 +92,22 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
                                                     ? field.value.slice(1)
                                                     : field.value || ""
                                             }
-                                            onChange={handleChange}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) =>
+                                            field.onChange({
+                                                ...e,
+                                                target: {
+                                                    ...e.target,
+                                                    value:
+                                                        "@" +
+                                                        e.target.value.replace(
+                                                            /^@+/,
+                                                            ""
+                                                        ),
+                                                },
+                                            })
+                                        }
                                         />
                                         <InputGroupAddon>
                                             <UserIcon />
