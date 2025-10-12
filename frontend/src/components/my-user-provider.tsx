@@ -28,10 +28,7 @@ export type MyUserProviderProps = PropsWithChildren;
 
 export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
     const [state, setState] = useState<
-        Omit<
-            MyUserStateProps,
-            "data" | "isLoggingOutPending" | "isGettingMyUserLoading"
-        >
+        Omit<MyUserStateProps, "isLoggingOutPending" | "isGettingMyUserLoading">
     >({
         Logout: () => mutateLogout(),
         token: localStorage.getItem("token")?.toString(),
@@ -53,6 +50,13 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
                     .then((_data) => {
                         localStorage.removeItem("token");
                         toast.success("Successfully logged out!");
+
+                        setState((state) => ({
+                            ...state,
+                            token: undefined,
+                            myUser: undefined,
+                        }));
+
                         Navigate({
                             to: "/registration",
                             search: { mode: "login" },
@@ -65,12 +69,21 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
                     ),
         });
 
-    const { data: myUser, isLoading: isGettingMyUserLoading } = useQuery({
-        queryKey: ["GET-MY-USER"],
+    const { isLoading: isGettingMyUserLoading } = useQuery({
+        queryKey: ["GET-MY-USER", state.token],
         enabled: state.token != null,
         queryFn: () =>
             HTTPManager.get("users/mine")
                 .then((response) => response.data)
+                .then(
+                    (data) => (
+                        setState((state) => ({
+                            ...state,
+                            myUser: data,
+                        })),
+                        data
+                    )
+                )
                 .catch((error) =>
                     toast.error(
                         error?.response?.data?.message ?? error?.message
@@ -82,7 +95,6 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
         <MyUserContext.Provider
             value={{
                 ...state,
-                myUser,
                 isLoggingOutPending,
                 isGettingMyUserLoading,
             }}
