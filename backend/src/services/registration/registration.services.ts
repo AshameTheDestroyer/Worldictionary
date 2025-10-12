@@ -9,11 +9,20 @@ import { SignupSchema } from "../../../../src/schemas/SignupSchema";
 export const Signup: Handler = async (request, response) => {
     try {
         const payload = SignupSchema.parse(request.body);
-        const user = await UserModel.findOne({ email: payload.email });
-        if (user != null) {
+        const userByEmail = await UserModel.findOne({ email: payload.email });
+        if (userByEmail != null) {
             return response
                 .status(400)
                 .send({ message: "Email is already taken." });
+        }
+
+        const userByUsername = await UserModel.findOne({
+            username: payload.username,
+        });
+        if (userByUsername != null) {
+            return response
+                .status(400)
+                .send({ message: "Username is already taken." });
         }
 
         const hashedPassword = await HashPassword(payload.password);
