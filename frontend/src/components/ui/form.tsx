@@ -12,6 +12,7 @@ import {
     useFormContext,
     type FieldPath,
     type FieldValues,
+    type SubmitHandler,
     type ControllerProps,
     type FormProviderProps,
 } from "react-hook-form";
@@ -23,17 +24,29 @@ type FormProps<
 > = FormProviderProps<TFieldValues, TContext, TTransformedValues> & {
     id?: string;
     className?: string;
+    SubmitFn: SubmitHandler<TTransformedValues>;
 };
 
 const Form = <
     TFieldValues extends FieldValues,
     TContext = any,
     TTransformedValues = TFieldValues,
->(
-    props: FormProps<TFieldValues, TContext, TTransformedValues>
-): ReturnType<React.FC> => {
+>({
+    id,
+    SubmitFn,
+    className,
+    ...props
+}: FormProps<
+    TFieldValues,
+    TContext,
+    TTransformedValues
+>): ReturnType<React.FC> => {
     return (
-        <form {...props}>
+        <form
+            id={id}
+            className={className}
+            onSubmit={props.handleSubmit(SubmitFn)}
+        >
             <FormProvider {...props} />
         </form>
     );

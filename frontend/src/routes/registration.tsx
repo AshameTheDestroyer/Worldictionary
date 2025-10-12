@@ -29,8 +29,6 @@ function RouteComponent() {
     const { mode } = Route.useSearch();
     const formRef = useRef<UseFormReturn<SignupFormDTO | LoginFormDTO>>(null);
 
-    console.log(formRef.current?.getValues("username"));
-
     return (
         <main className="flex-1 flex place-content-center place-items-center">
             <Card className="py-12 px-4 gap-8">
@@ -78,11 +76,22 @@ function RouteComponent() {
                         <Button
                             type="reset"
                             variant="outline"
-                            onClick={() => formRef.current?.reset()}
+                            form="registration-form"
+                            onClick={(_e) =>
+                                formRef.current?.reset({
+                                    email: "",
+                                    password: "",
+                                    "last-name": "",
+                                    "first-name": "",
+                                    gender: undefined,
+                                    birthday: undefined,
+                                    "confirm-password": "",
+                                })
+                            }
                         >
                             Clear
                         </Button>
-                        <Button type="submit">
+                        <Button type="submit" form="registration-form">
                             {mode.charAt(0).toUpperCase() + mode.slice(1)}
                         </Button>
                     </div>
@@ -96,7 +105,7 @@ function RouteComponent() {
                                 <div>
                                     <span>Doesn't have an account?</span>{" "}
                                     <Link
-                                        className="underline"
+                                        className="underline text-emerald-500"
                                         to="/registration"
                                         search={{ mode: "signup" }}
                                     >
@@ -108,7 +117,7 @@ function RouteComponent() {
                                 <div>
                                     <span>Already have an account?</span>{" "}
                                     <Link
-                                        className="underline"
+                                        className="underline text-emerald-500"
                                         to="/registration"
                                         search={{ mode: "login" }}
                                     >
