@@ -14,6 +14,7 @@ export const UserSchema = z.object({
     email: z.email("required"),
     birthday: z.date().optional(),
     role: z.enum(Role, "required"),
+    password: z.string("required"),
     gender: z.enum(Gender, "required"),
     username: z
         .string("required")
@@ -31,14 +32,6 @@ export const UserSchema = z.object({
         .max(20, "maximum")
         .regex(/^\S+$/, "pattern")
         .optional(),
-    password: z
-        .string("required")
-        .min(8, "minimum")
-        .max(20, "maximum")
-        .regex(
-            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$/,
-            "pattern"
-        ),
 });
 
 export type UserDTO = z.infer<typeof UserSchema>;
