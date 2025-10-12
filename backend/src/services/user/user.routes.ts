@@ -19,6 +19,13 @@ export const USER_ROUTE = "/users";
 export const UserRouter = Router();
 
 UserRouter.get(
+    `${USER_ROUTE}/mine`,
+    ValidateAuthenticity,
+    ValidateRateLimit(),
+    GetMyUser
+);
+
+UserRouter.get(
     USER_ROUTE,
     ValidateAuthenticity,
     ValidateAuthority(Role.admin),
@@ -32,13 +39,6 @@ UserRouter.get(
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
     GetUserByID
-);
-
-UserRouter.get(
-    `${USER_ROUTE}/mine`,
-    ValidateAuthenticity,
-    ValidateRateLimit(),
-    GetMyUser
 );
 
 UserRouter.post(
