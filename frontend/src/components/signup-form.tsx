@@ -2,14 +2,14 @@ import * as z from "zod";
 import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
+import { FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
 import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../src/schemas/UserSchema";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { FC, useImperativeHandle, useState } from "react";
 import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormItem, FormField, FormLabel, FormControl } from "./ui/form";
 import {
@@ -53,22 +53,20 @@ export const SignupFormSchema = z
 
 export type SignupFormDTO = z.infer<typeof SignupFormSchema>;
 
-export type SignupFormProps = {
-    ref?: React.Ref<UseFormReturn<SignupFormDTO>>;
-};
-
-export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
+export const SignupForm: FC = () => {
     const form = useForm({
         resolver: zodResolver(SignupFormSchema),
     });
-
-    useImperativeHandle(ref, () => form);
 
     const { mutate } = useMutation({
         mutationFn: (data: SignupDTO) =>
             HTTPManager.post("registration/signup", data)
                 .then((response) => response.data)
-                .catch((error) => toast.error(`${error}`)),
+                .catch((error) =>
+                    toast.error(
+                        error?.response?.data?.message ?? error?.message
+                    )
+                ),
     });
 
     function HandleSubmit(data: SignupFormDTO) {
@@ -78,289 +76,330 @@ export const SignupForm: FC<SignupFormProps> = ({ ref }) => {
     return (
         <Form
             id="registration-form"
-            className="grid grid-cols-[1fr_auto_1fr] gap-4 max-md:flex flex-1 max-md:flex-col"
+            className="flex flex-col gap-8"
             SubmitFn={HandleSubmit}
             {...form}
         >
-            <div className="flex flex-col gap-4 flex-1">
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel aria-required>
-                                Username
-                                <span className="text-emerald-500">*</span>
-                            </FormLabel>
-                            <FormControl>
-                                <InputGroup>
-                                    <InputGroupText className="ml-2 -mr-1 translate-y-0.25">
-                                        @
-                                    </InputGroupText>
-                                    <InputGroupInput
-                                        type="text"
-                                        placeholder="username"
-                                        {...field}
-                                        value={
-                                            field.value?.startsWith("@")
-                                                ? field.value.slice(1)
-                                                : field.value || ""
-                                        }
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) =>
+            <main className="grid grid-cols-[1fr_auto_1fr] gap-4 max-md:flex flex-1 max-md:flex-col">
+                <div className="flex flex-col gap-4 flex-1">
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel aria-required>
+                                    Username
+                                    <span className="text-emerald-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <InputGroup>
+                                        <InputGroupText className="ml-2 -mr-1 translate-y-0.25">
+                                            @
+                                        </InputGroupText>
+                                        <InputGroupInput
+                                            type="text"
+                                            placeholder="username"
+                                            {...field}
+                                            value={
+                                                field.value?.startsWith("@")
+                                                    ? field.value.slice(1)
+                                                    : field.value || ""
+                                            }
+                                            onChange={(
+                                                e: React.ChangeEvent<HTMLInputElement>
+                                            ) =>
+                                                field.onChange({
+                                                    ...e,
+                                                    target: {
+                                                        ...e.target,
+                                                        value:
+                                                            "@" +
+                                                            e.target.value.replace(
+                                                                /^@+/,
+                                                                ""
+                                                            ),
+                                                    },
+                                                })
+                                            }
+                                        />
+                                        <InputGroupAddon>
+                                            <UserIcon />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel aria-required>
+                                    Email
+                                    <span className="text-emerald-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            type="email"
+                                            placeholder="example@gmail.com"
+                                            {...field}
+                                        />
+                                        <InputGroupAddon>
+                                            <MailIcon />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => {
+                            const [visibility, setVisibility] = useState(false);
+                            return (
+                                <FormItem>
+                                    <FormLabel aria-required>
+                                        Password
+                                        <span className="text-emerald-500">
+                                            *
+                                        </span>
+                                    </FormLabel>
+                                    <FormControl>
+                                        <InputGroup>
+                                            <InputGroupInput
+                                                type={
+                                                    visibility
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                                placeholder="P@$$w0rd"
+                                                {...field}
+                                            />
+                                            <InputGroupAddon>
+                                                <LockIcon />
+                                            </InputGroupAddon>
+                                            <InputGroupButton
+                                                onClick={(_e) =>
+                                                    setVisibility(
+                                                        (value) => !value
+                                                    )
+                                                }
+                                            >
+                                                {visibility ? (
+                                                    <EyeOffIcon />
+                                                ) : (
+                                                    <EyeIcon />
+                                                )}
+                                            </InputGroupButton>
+                                        </InputGroup>
+                                    </FormControl>
+                                </FormItem>
+                            );
+                        }}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="confirm-password"
+                        render={({ field }) => {
+                            const [visibility, setVisibility] = useState(false);
+                            return (
+                                <FormItem>
+                                    <FormLabel aria-required>
+                                        Confirm Password
+                                        <span className="text-emerald-500">
+                                            *
+                                        </span>
+                                    </FormLabel>
+                                    <FormControl>
+                                        <InputGroup>
+                                            <InputGroupInput
+                                                type={
+                                                    visibility
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                                placeholder="C0nf!r^^_P@$$w0rd"
+                                                {...field}
+                                            />
+                                            <InputGroupAddon>
+                                                <LockIcon />
+                                            </InputGroupAddon>
+                                            <InputGroupButton
+                                                onClick={(_e) =>
+                                                    setVisibility(
+                                                        (value) => !value
+                                                    )
+                                                }
+                                            >
+                                                {visibility ? (
+                                                    <EyeOffIcon />
+                                                ) : (
+                                                    <EyeIcon />
+                                                )}
+                                            </InputGroupButton>
+                                        </InputGroup>
+                                    </FormControl>
+                                </FormItem>
+                            );
+                        }}
+                    />
+                </div>
+                <Separator
+                    className="h-full max-md:hidden"
+                    orientation="vertical"
+                />
+                <Separator className="md:hidden" orientation="horizontal" />
+
+                <div className="flex flex-col gap-4">
+                    <FormField
+                        control={form.control}
+                        name="first-name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel aria-required>
+                                    First Name
+                                    <span className="text-emerald-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            type="text"
+                                            placeholder="Hashem"
+                                            {...field}
+                                        />
+                                        <InputGroupAddon>
+                                            <TagIcon />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="last-name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Last Name</FormLabel>
+                                <FormControl>
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            type="text"
+                                            placeholder="Wannous"
+                                            {...field}
+                                        />
+                                        <InputGroupAddon>
+                                            <TagsIcon />
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="birthday"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Birthday</FormLabel>
+                                <div className="[&>*]:w-full">
+                                    <DatePicker
+                                        date={field.value}
+                                        setDate={(date) =>
                                             field.onChange({
-                                                ...e,
-                                                target: {
-                                                    ...e.target,
-                                                    value:
-                                                        "@" +
-                                                        e.target.value.replace(
-                                                            /^@+/,
-                                                            ""
-                                                        ),
-                                                },
+                                                target: { value: date },
                                             })
                                         }
                                     />
-                                    <InputGroupAddon>
-                                        <UserIcon />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
+                                </div>
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel aria-required>
-                                Email
-                                <span className="text-emerald-500">*</span>
-                            </FormLabel>
-                            <FormControl>
-                                <InputGroup>
-                                    <InputGroupInput
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        {...field}
-                                    />
-                                    <InputGroupAddon>
-                                        <MailIcon />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => {
-                        const [visibility, setVisibility] = useState(false);
-                        return (
+                    <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
                             <FormItem>
                                 <FormLabel aria-required>
-                                    Password
+                                    Gender
                                     <span className="text-emerald-500">*</span>
                                 </FormLabel>
-                                <FormControl>
-                                    <InputGroup>
-                                        <InputGroupInput
-                                            type={
-                                                visibility ? "text" : "password"
-                                            }
-                                            placeholder="P@$$w0rd"
-                                            {...field}
-                                        />
-                                        <InputGroupAddon>
-                                            <LockIcon />
-                                        </InputGroupAddon>
-                                        <InputGroupButton
-                                            onClick={(_e) =>
-                                                setVisibility((value) => !value)
-                                            }
-                                        >
-                                            {visibility ? (
-                                                <EyeOffIcon />
-                                            ) : (
-                                                <EyeIcon />
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            className={cn(
+                                                "bg-transparent! place-content-start!",
+                                                field.value == null &&
+                                                    "text-muted-foreground!"
                                             )}
-                                        </InputGroupButton>
-                                    </InputGroup>
-                                </FormControl>
-                            </FormItem>
-                        );
-                    }}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="confirm-password"
-                    render={({ field }) => {
-                        const [visibility, setVisibility] = useState(false);
-                        return (
-                            <FormItem>
-                                <FormLabel aria-required>
-                                    Confirm Password
-                                    <span className="text-emerald-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                    <InputGroup>
-                                        <InputGroupInput
-                                            type={
-                                                visibility ? "text" : "password"
-                                            }
-                                            placeholder="C0nf!r^^_P@$$w0rd"
-                                            {...field}
-                                        />
-                                        <InputGroupAddon>
-                                            <LockIcon />
-                                        </InputGroupAddon>
-                                        <InputGroupButton
-                                            onClick={(_e) =>
-                                                setVisibility((value) => !value)
-                                            }
+                                            variant="outline"
                                         >
-                                            {visibility ? (
-                                                <EyeOffIcon />
-                                            ) : (
-                                                <EyeIcon />
-                                            )}
-                                        </InputGroupButton>
-                                    </InputGroup>
-                                </FormControl>
-                            </FormItem>
-                        );
-                    }}
-                />
-            </div>
-            <Separator
-                className="h-full max-md:hidden"
-                orientation="vertical"
-            />
-            <Separator className="md:hidden" orientation="horizontal" />
-
-            <div className="flex flex-col gap-4">
-                <FormField
-                    control={form.control}
-                    name="first-name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel aria-required>
-                                First Name
-                                <span className="text-emerald-500">*</span>
-                            </FormLabel>
-                            <FormControl>
-                                <InputGroup>
-                                    <InputGroupInput
-                                        type="text"
-                                        placeholder="Hashem"
-                                        {...field}
-                                    />
-                                    <InputGroupAddon>
-                                        <TagIcon />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="last-name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Last Name</FormLabel>
-                            <FormControl>
-                                <InputGroup>
-                                    <InputGroupInput
-                                        type="text"
-                                        placeholder="Wannous"
-                                        {...field}
-                                    />
-                                    <InputGroupAddon>
-                                        <TagsIcon />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="birthday"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Birthday</FormLabel>
-                            <div className="[&>*]:w-full">
-                                <DatePicker
-                                    date={field.value}
-                                    setDate={(date) =>
-                                        field.onChange({
-                                            target: { value: date },
-                                        })
-                                    }
-                                />
-                            </div>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel aria-required>
-                                Gender
-                                <span className="text-emerald-500">*</span>
-                            </FormLabel>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        className={cn(
-                                            "bg-transparent! place-content-start!",
-                                            field.value == null &&
-                                                "text-muted-foreground!"
+                                            <VenusAndMarsIcon />
+                                            <p>
+                                                {field.value
+                                                    ?.charAt(0)
+                                                    .toUpperCase() +
+                                                    field.value?.slice(1) ||
+                                                    "Select your gender"}
+                                            </p>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {Object.values(Gender).map(
+                                            (value, i) => (
+                                                <DropdownMenuItem
+                                                    key={i}
+                                                    onClick={() =>
+                                                        field.onChange({
+                                                            target: { value },
+                                                        })
+                                                    }
+                                                >
+                                                    {value
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        value.slice(1)}
+                                                </DropdownMenuItem>
+                                            )
                                         )}
-                                        variant="outline"
-                                    >
-                                        <VenusAndMarsIcon />
-                                        <p>
-                                            {field.value
-                                                ?.charAt(0)
-                                                .toUpperCase() +
-                                                field.value?.slice(1) ||
-                                                "Select your gender"}
-                                        </p>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    {Object.values(Gender).map((value, i) => (
-                                        <DropdownMenuItem
-                                            key={i}
-                                            onClick={() =>
-                                                field.onChange({
-                                                    target: { value },
-                                                })
-                                            }
-                                        >
-                                            {value.charAt(0).toUpperCase() +
-                                                value.slice(1)}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </FormItem>
-                    )}
-                />
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </FormItem>
+                        )}
+                    />
+                </div>
+            </main>
+            <div className="grid grid-cols-2 gap-4 md:gap-8">
+                <Button
+                    type="reset"
+                    variant="outline"
+                    form="registration-form"
+                    onClick={(_e) =>
+                        form.reset({
+                            email: "",
+                            password: "",
+                            "last-name": "",
+                            "first-name": "",
+                            gender: undefined,
+                            birthday: undefined,
+                            "confirm-password": "",
+                        })
+                    }
+                >
+                    Clear
+                </Button>
+                <Button type="submit" form="registration-form">
+                    Signup
+                </Button>
             </div>
         </Form>
     );
