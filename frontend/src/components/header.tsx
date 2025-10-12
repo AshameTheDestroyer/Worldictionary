@@ -14,6 +14,7 @@ import {
     DropdownMenuTrigger,
     DropdownMenuContent,
 } from "./ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export type HeaderProps = {
     id?: string;
@@ -23,8 +24,13 @@ export type HeaderProps = {
 export const Header: FC<HeaderProps> = ({ id, className }) => {
     const { pathname } = useLocation();
 
-    const { myUser, Logout, isLoggingOutPending, isGettingMyUserLoading } =
-        useMyUser();
+    const {
+        token,
+        myUser,
+        Logout,
+        isLoggingOutPending,
+        isGettingMyUserLoading,
+    } = useMyUser();
 
     return (
         <header
@@ -37,9 +43,20 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
             <HistoryBreadcrumb className="w-screen" />
             <h1 className="text-3xl font-bold">Worldictionary</h1>
             <div className="flex gap-4 flex-1 place-content-end">
-                {!isGettingMyUserLoading &&
-                    !pathname.startsWith("/registration") &&
-                    (myUser != null ? (
+                {!pathname.startsWith("/registration") &&
+                    (token == null ? (
+                        <div className="flex gap-2">
+                            <Link
+                                to="/registration"
+                                search={{ mode: "signup" }}
+                            >
+                                <Button variant="secondary">Sign up</Button>
+                            </Link>
+                            <Link to="/registration" search={{ mode: "login" }}>
+                                <Button>Login</Button>
+                            </Link>
+                        </div>
+                    ) : myUser != null && !isGettingMyUserLoading ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Avatar className="size-9">
@@ -52,7 +69,7 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                                 <DropdownMenuItem asChild>
                                     <Link
                                         className="w-full place-content-end!"
-                                        to="/"
+                                        to="/profile"
                                     >
                                         Profile
                                     </Link>
@@ -79,17 +96,12 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-                        <div className="flex gap-2">
-                            <Link
-                                to="/registration"
-                                search={{ mode: "signup" }}
-                            >
-                                <Button variant="secondary">Sign up</Button>
-                            </Link>
-                            <Link to="/registration" search={{ mode: "login" }}>
-                                <Button>Login</Button>
-                            </Link>
-                        </div>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Spinner className="text-emerald-500 size-9 p-1" />
+                            </TooltipTrigger>
+                            <TooltipContent>Avatar's loading...</TooltipContent>
+                        </Tooltip>
                     ))}
                 <ModeToggle />
             </div>
