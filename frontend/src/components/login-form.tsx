@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { FC, useState } from "react";
 import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
+import { useMyUser } from "./my-user-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
@@ -23,12 +24,16 @@ export const LoginForm: FC = () => {
     });
 
     const Navigate = useNavigate();
+    const { setToken } = useMyUser();
 
     const { mutate, isPending } = useMutation({
+        mutationKey: ["LOGIN"],
         mutationFn: (data: LoginDTO) =>
             HTTPManager.post("registration/login", data)
-                .then((response) => response.data)
-                .then((_data) => {
+                .then((response) => response.data.token)
+                .then((token) => {
+                    setToken(token);
+                    localStorage.setItem("token", token);
                     toast.success("Successfully logged in!");
                     Navigate({ to: "/" });
                 })

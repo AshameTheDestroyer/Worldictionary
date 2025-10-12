@@ -63,6 +63,7 @@ export const SignupForm: FC = () => {
     const Navigate = useNavigate();
 
     const { mutate, isPending } = useMutation({
+        mutationKey: ["SIGNUP"],
         mutationFn: (data: SignupDTO) =>
             HTTPManager.post("registration/signup", data)
                 .then((response) => response.data)
