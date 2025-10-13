@@ -1,12 +1,14 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
-import { useMyUser } from "@/components/my-user-provider";
-import { createFileRoute, Navigate } from "@tanstack/react-router";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import { StarIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
+import { Separator } from "@/components/ui/separator";
 import { Role } from "../../../src/schemas/UserSchema";
+import { ProfileForm } from "@/components/profile-form";
+import { useMyUser } from "@/components/my-user-provider";
 import { CopyableText } from "@/components/copyable-text";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/profile")({
     component: RouteComponent,
@@ -31,14 +33,14 @@ function RouteComponent() {
     }
 
     return (
-        <main className="flex-1 flex flex-col gap-8 p-8">
-            <header className="flex gap-8 place-items-start">
-                <Avatar className="size-64">
-                    <AvatarFallback className="bg-emerald-500 text-9xl">
+        <main className="flex-1 flex flex-col gap-16 max-sm:gap-8 p-8 max-sm:p-4">
+            <header className="flex gap-8 place-items-center max-sm:place-items-start max-sm:flex-wrap">
+                <Avatar className="size-64 max-sm:size-16">
+                    <AvatarFallback className="bg-emerald-500 text-9xl max-sm:text-4xl">
                         {myUser["first-name"][0].toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
-                <div className="translate-y-8 space-y-6">
+                <div className="space-y-6">
                     <div className="space-y-2">
                         <h2 className="font-bold text-4xl">
                             {myUser["first-name"]} {myUser["last-name"]}
@@ -66,7 +68,16 @@ function RouteComponent() {
                 </div>
             </header>
             <Separator />
-            <main></main>
+            <Card className="py-12 px-4 gap-8 place-self-center min-w-[50vw]">
+                <CardHeader>
+                    <CardTitle className="text-2xl">
+                        Edit Profile Information
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ProfileForm user={myUser} />
+                </CardContent>
+            </Card>
         </main>
     );
 }

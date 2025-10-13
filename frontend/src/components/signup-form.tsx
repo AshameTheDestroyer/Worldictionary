@@ -353,7 +353,7 @@ export const SignupForm: FC = () => {
                                     <DropdownMenuTrigger asChild>
                                         <Button
                                             className={cn(
-                                                "bg-transparent! place-content-start!",
+                                                "bg-input/30! place-content-start!",
                                                 field.value == null &&
                                                     "text-muted-foreground!"
                                             )}
@@ -361,11 +361,12 @@ export const SignupForm: FC = () => {
                                         >
                                             <VenusAndMarsIcon />
                                             <p>
-                                                {field.value
-                                                    ?.charAt(0)
-                                                    .toUpperCase() +
-                                                    field.value?.slice(1) ||
-                                                    "Select your gender"}
+                                                {field.value != null
+                                                    ? field.value
+                                                          ?.charAt(0)
+                                                          .toUpperCase() +
+                                                      field.value?.slice(1)
+                                                    : "Select your gender"}
                                             </p>
                                         </Button>
                                     </DropdownMenuTrigger>
