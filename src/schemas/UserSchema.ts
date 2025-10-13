@@ -20,7 +20,7 @@ export const UserSchema = z.object({
         .string("required")
         .min(4, "minimum")
         .max(20, "maximum")
-        .regex(/^@[a-zA-Z\d]+$/, "pattern"),
+        .regex(/^@[a-z\d]+$/, "pattern"),
     "first-name": z
         .string("required")
         .min(2, "minimum")
