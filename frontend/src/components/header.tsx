@@ -41,7 +41,9 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
             )}
         >
             <HistoryBreadcrumb className="w-screen" />
-            <h1 className="text-3xl font-bold">Worldictionary</h1>
+            <Link to="/">
+                <h1 className="text-3xl font-bold">Worldictionary</h1>
+            </Link>
             <div className="flex gap-4 flex-1 place-content-end">
                 {!pathname.startsWith("/registration") &&
                     (token == null ? (
