@@ -1,4 +1,3 @@
-import { StarIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
@@ -6,6 +5,7 @@ import { Role } from "../../../src/schemas/UserSchema";
 import { ProfileForm } from "@/components/profile-form";
 import { useMyUser } from "@/components/my-user-provider";
 import { CopyableText } from "@/components/copyable-text";
+import { MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,12 +59,30 @@ function RouteComponent() {
                         message="Email's been copied."
                     />
 
-                    {myUser.role == Role.admin && (
-                        <Badge className="text-md bg-amber-500 text-white font-bold">
-                            <StarIcon className="size-4! stroke-3" />
-                            Admin
-                        </Badge>
-                    )}
+                    <div className="flex gap-2 flex-wrap">
+                        {myUser.role == Role.admin && (
+                            <Badge className="text-md bg-amber-500 text-white font-bold">
+                                <StarIcon className="size-4! stroke-3" />
+                                Admin
+                            </Badge>
+                        )}
+                        {
+                            {
+                                male: (
+                                    <Badge className="text-md bg-blue-500 text-white font-bold">
+                                        <MarsIcon className="size-4! stroke-3" />
+                                        Male
+                                    </Badge>
+                                ),
+                                female: (
+                                    <Badge className="text-md bg-pink-500 text-white font-bold">
+                                        <VenusIcon className="size-4! stroke-3" />
+                                        Female
+                                    </Badge>
+                                ),
+                            }[myUser.gender]
+                        }
+                    </div>
                 </div>
             </header>
             <Separator />
