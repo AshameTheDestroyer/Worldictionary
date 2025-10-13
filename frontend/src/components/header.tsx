@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 import { Separator } from "./ui/separator";
 import { ModeToggle } from "./mode-toggle";
+import { SidebarTrigger } from "./ui/sidebar";
 import { useMyUser } from "./my-user-provider";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
@@ -42,7 +43,10 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                 className
             )}
         >
-            <HistoryBreadcrumb className="w-screen" />
+            <div className="flex gap-4 place-items-center w-full">
+                <SidebarTrigger />
+                <HistoryBreadcrumb />
+            </div>
             <Link className="flex gap-2 place-items-center" to="/">
                 <WorldictionaryIcon />
                 <h1 className="text-3xl font-bold">Worldictionary</h1>
