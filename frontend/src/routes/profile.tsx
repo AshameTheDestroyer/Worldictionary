@@ -6,7 +6,7 @@ import { Role } from "../../../src/schemas/UserSchema";
 import { ProfileForm } from "@/components/profile-form";
 import { useMyUser } from "@/components/my-user-provider";
 import { CopyableText } from "@/components/copyable-text";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { EditableAvatar } from "@/components/editable-avatar";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { CakeIcon, MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,11 +36,10 @@ function RouteComponent() {
     return (
         <main className="flex-1 flex flex-col gap-16 max-sm:gap-8 p-8 max-sm:p-4">
             <header className="flex gap-8 place-items-center max-sm:place-items-start max-sm:flex-wrap">
-                <Avatar className="size-64 max-sm:size-16">
-                    <AvatarFallback className="bg-emerald-500 text-9xl max-sm:text-4xl">
-                        {myUser["first-name"][0].toUpperCase()}
-                    </AvatarFallback>
-                </Avatar>
+                <EditableAvatar
+                    className="size-64 max-sm:size-16 [&_svg]:size-32 max-sm:[&_svg]:size-8 [&_.avatar-letter]:text-9xl max-sm:[&_.avatar-letter]:text-4xl"
+                    user={myUser}
+                />
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <h2 className="font-bold text-4xl">
