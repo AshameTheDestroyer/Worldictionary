@@ -1,8 +1,8 @@
-import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { FC, useRef, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserDTO } from "../../../src/schemas/UserSchema";
 import { CameraIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import {
@@ -26,6 +26,9 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
     user,
     className,
 }) => {
+    const [file, setFile] = useState<File>();
+    const inputRef = useRef<HTMLInputElement>(null);
+
     return (
         <Avatar id={id} className={cn("relative size-9", className)}>
             <AvatarFallback className="bg-emerald-500 avatar-letter">
@@ -45,19 +48,47 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                     </DialogHeader>
 
                     <main className="flex gap-4 max-sm:flex-col place-content-center place-items-center">
-                        <Avatar className="size-32 max-sm:size-48">
+                        <Avatar
+                            key={inputRef.current?.value}
+                            className="size-32 max-sm:size-48"
+                        >
                             <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
                                 {user["first-name"][0].toUpperCase()}
                             </AvatarFallback>
+                            {file != null && (
+                                <AvatarImage
+                                    src={URL.createObjectURL(file) ?? ""}
+                                />
+                            )}
                         </Avatar>
                         <div className="space-y-4">
                             <DialogDescription>
                                 Please upload an image to change your profile
                                 picture, or you can just remove it.
                             </DialogDescription>
-                            <Input className="cursor-pointer!" type="file" />
+
+                            <Input
+                                ref={inputRef}
+                                className="cursor-pointer!"
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                    setFile(
+                                        e.target.files?.item(0) ?? undefined
+                                    )
+                                }
+                            />
+
                             <DialogFooter className="grid grid-cols-2 max-sm:flex max-sm:flex-col">
-                                <Button variant="destructive">
+                                <Button
+                                    variant="destructive"
+                                    disabled={file == null}
+                                    onClick={(_e) => (
+                                        inputRef.current != null &&
+                                            (inputRef.current.value = ""),
+                                        setFile(undefined)
+                                    )}
+                                >
                                     <Trash2Icon />
                                     Remove Picture
                                 </Button>
