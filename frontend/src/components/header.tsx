@@ -8,13 +8,13 @@ import { useMyUser } from "./my-user-provider";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
 import { Link, useLocation } from "@tanstack/react-router";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
     DropdownMenu,
     DropdownMenuItem,
     DropdownMenuTrigger,
     DropdownMenuContent,
 } from "./ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export type HeaderProps = {
     id?: string;
@@ -75,23 +75,18 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                                     </Link>
                                 </DropdownMenuItem>
                                 <Separator />
-                                <DropdownMenuItem asChild>
-                                    <Button
-                                        className="w-full place-content-end!"
-                                        variant="ghost"
-                                        onClick={Logout}
-                                        disabled={isLoggingOutPending}
-                                    >
-                                        <Spinner
-                                            className={cn(
-                                                "mr-auto",
-                                                !isLoggingOutPending &&
-                                                    "invisible"
-                                            )}
-                                            aria-hidden={!isLoggingOutPending}
-                                        />
-                                        Log out
-                                    </Button>
+                                <DropdownMenuItem
+                                    onClick={Logout}
+                                    disabled={isLoggingOutPending}
+                                >
+                                    <Spinner
+                                        className={cn(
+                                            "mr-auto",
+                                            !isLoggingOutPending && "invisible"
+                                        )}
+                                        aria-hidden={!isLoggingOutPending}
+                                    />
+                                    Log out
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
