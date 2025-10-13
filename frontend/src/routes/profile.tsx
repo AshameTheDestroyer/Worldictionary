@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
@@ -5,9 +6,9 @@ import { Role } from "../../../src/schemas/UserSchema";
 import { ProfileForm } from "@/components/profile-form";
 import { useMyUser } from "@/components/my-user-provider";
 import { CopyableText } from "@/components/copyable-text";
-import { MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { CakeIcon, MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/profile")({
@@ -82,6 +83,12 @@ function RouteComponent() {
                                 ),
                             }[myUser.gender]
                         }
+                        {myUser.birthday != null && (
+                            <Badge className="text-md bg-red-500 text-white font-bold">
+                                <CakeIcon className="size-4! stroke-3" />
+                                {format(myUser.birthday, "PPP")}
+                            </Badge>
+                        )}
                     </div>
                 </div>
             </header>
