@@ -75,6 +75,10 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
         queryFn: () =>
             HTTPManager.get("users/mine")
                 .then((response) => response.data)
+                .then((data) => ({
+                    ...data,
+                    birthday: new Date(data.birthday),
+                }))
                 .then(
                     (data) => (
                         setState((state) => ({
