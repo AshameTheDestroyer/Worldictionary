@@ -1,9 +1,14 @@
 import z from "zod";
 import { FC } from "react";
 import { cn } from "@/utils/cn";
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
+import { queryClient } from "@/main";
+import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "./date-picker";
+import { useMutation } from "@tanstack/react-query";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";
 import { Gender, UserDTO, UserSchema } from "../../../src/schemas/UserSchema";
@@ -36,9 +41,45 @@ export type ProfileFormProps = {
 export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     const form = useForm({
         resolver: zodResolver(ProfileFormSchema),
+        defaultValues: {
+            gender: undefined,
+            birthday: undefined,
+            username: undefined,
+            "last-name": undefined,
+            "first-name": undefined,
+        },
     });
 
-    function HandleSubmit(data: ProfileFormDTO) {}
+    const { mutate, isPending } = useMutation({
+        mutationKey: ["PATCH-MY-USER"],
+        mutationFn: (data: ProfileFormDTO) =>
+            HTTPManager.patch("users/mine", data)
+                .then((response) => response.data)
+                .then((_data) => {
+                    toast.success("Successfully edited profile information!");
+                    queryClient.invalidateQueries({
+                        queryKey: ["GET-MY-USER"],
+                    });
+                    form.reset();
+                })
+                .catch((error) =>
+                    toast.error(
+                        error?.response?.data?.message ?? error?.message
+                    )
+                ),
+    });
+
+    function HandleSubmit(data: ProfileFormDTO) {
+        mutate(
+            Object.entries(data).reduce(
+                (accumulator, [key, value]) =>
+                    value == null
+                        ? accumulator
+                        : { ...accumulator, [key]: value },
+                {}
+            )
+        );
+    }
 
     return (
         <Form
@@ -60,6 +101,18 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                                         type="text"
                                         placeholder={user["first-name"]}
                                         {...field}
+                                        value={field.value ?? ""}
+                                        onChange={(e) =>
+                                            field.onChange({
+                                                ...e,
+                                                target: {
+                                                    ...e.target,
+                                                    value:
+                                                        e.target.value ||
+                                                        undefined,
+                                                },
+                                            })
+                                        }
                                     />
                                     <InputGroupAddon>
                                         <TagIcon />
@@ -82,6 +135,18 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                                         type="text"
                                         placeholder={user["last-name"]}
                                         {...field}
+                                        value={field.value ?? ""}
+                                        onChange={(e) =>
+                                            field.onChange({
+                                                ...e,
+                                                target: {
+                                                    ...e.target,
+                                                    value:
+                                                        e.target.value ||
+                                                        undefined,
+                                                },
+                                            })
+                                        }
                                     />
                                     <InputGroupAddon>
                                         <TagsIcon />
@@ -112,19 +177,19 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                                                 ? field.value.slice(1)
                                                 : field.value || ""
                                         }
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) =>
+                                        onChange={(e) =>
                                             field.onChange({
                                                 ...e,
                                                 target: {
                                                     ...e.target,
                                                     value:
-                                                        "@" +
-                                                        e.target.value.replace(
-                                                            /^@+/,
-                                                            ""
-                                                        ),
+                                                        e.target.value == ""
+                                                            ? undefined
+                                                            : "@" +
+                                                              e.target.value.replace(
+                                                                  /^@+/,
+                                                                  ""
+                                                              ),
                                                 },
                                             })
                                         }
@@ -146,6 +211,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                             <FormLabel>Birthday</FormLabel>
                             <div className="[&>*]:w-full">
                                 <DatePicker
+                                    placeholder={user.birthday}
                                     date={
                                         typeof field.value == "string"
                                             ? new Date(field.value)
@@ -218,24 +284,16 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                     type="reset"
                     variant="outline"
                     form="profile-form"
-                    onClick={(_e) =>
-                        form.reset({
-                            gender: undefined,
-                            birthday: undefined,
-                            username: undefined,
-                            "last-name": undefined,
-                            "first-name": undefined,
-                        })
-                    }
+                    onClick={(_e) => form.reset()}
                 >
                     Clear
                 </Button>
                 <Button
                     type="submit"
-                    // disabled={isPending}
-                    form="registration-form"
+                    form="profile-form"
+                    disabled={isPending || !form.formState.isDirty}
                 >
-                    {/* {isPending && <Spinner />} */}
+                    {isPending && <Spinner />}
                     Update
                 </Button>
             </div>
