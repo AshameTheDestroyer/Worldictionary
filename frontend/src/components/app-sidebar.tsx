@@ -1,4 +1,8 @@
 import { FC } from "react";
+import { Separator } from "./ui/separator";
+import { useMyUser } from "./my-user-provider";
+import { CopyableText } from "./copyable-text";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import {
     Sidebar,
     SidebarGroup,
@@ -6,16 +10,12 @@ import {
     SidebarHeader,
     SidebarContent,
 } from "./ui/sidebar";
-import { useMyUser } from "./my-user-provider";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { CopyableText } from "./copyable-text";
-import { Separator } from "./ui/separator";
 
 export const AppSidebar: FC = () => {
     const { myUser } = useMyUser();
 
     return (
-        <Sidebar className="[&>*]:p-4">
+        <Sidebar>
             {myUser != null && (
                 <SidebarHeader className="pb-2 flex flex-col gap-4">
                     <div className="flex place-items-center gap-2">
