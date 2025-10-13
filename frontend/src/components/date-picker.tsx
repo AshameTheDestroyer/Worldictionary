@@ -6,8 +6,8 @@ import { CalendarIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export type DatePickerProps = {
-    placeholder?: string;
     date: Date | undefined;
+    placeholder?: Date | string;
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
@@ -28,7 +28,15 @@ export const DatePicker: FC<DatePickerProps> = ({
                     className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
                 >
                     <CalendarIcon />
-                    {date ? format(date, "PPP") : <span>{placeholder}</span>}
+                    {date ? (
+                        format(date, "PPP")
+                    ) : (
+                        <span>
+                            {typeof placeholder == "string"
+                                ? placeholder
+                                : format(placeholder, "PPP")}
+                        </span>
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
