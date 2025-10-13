@@ -11,6 +11,7 @@ import {
     PatchUser,
     GetMyUser,
     DeleteUser,
+    PatchMyUser,
     GetUserByID,
     DeleteAllUsers,
 } from "./user.services";
@@ -47,6 +48,13 @@ UserRouter.post(
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
     PostUser
+);
+
+UserRouter.patch(
+    `${USER_ROUTE}/mine`,
+    ValidateAuthenticity,
+    ValidateRateLimit(),
+    PatchMyUser
 );
 
 UserRouter.patch(
