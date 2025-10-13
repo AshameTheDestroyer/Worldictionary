@@ -5,6 +5,7 @@ import { CopyableText } from "./copyable-text";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import {
     Sidebar,
+    useSidebar,
     SidebarGroup,
     SidebarFooter,
     SidebarHeader,
@@ -14,10 +15,15 @@ import {
 export const AppSidebar: FC = () => {
     const { myUser } = useMyUser();
 
+    const { open } = useSidebar();
+
     return (
-        <Sidebar>
-            {myUser != null && (
-                <SidebarHeader className="pb-2 flex flex-col gap-4">
+        <Sidebar
+            className="dark:border-white/30 border-black/30"
+            collapsible="icon"
+        >
+            {myUser != null && open && (
+                <SidebarHeader className="flex flex-col gap-4">
                     <div className="flex place-items-center gap-2">
                         <Avatar className="size-10">
                             <AvatarFallback className="bg-emerald-500">
@@ -45,7 +51,7 @@ export const AppSidebar: FC = () => {
                 </SidebarHeader>
             )}
 
-            {myUser != null && <Separator />}
+            {myUser != null && open && <Separator />}
 
             <SidebarContent>
                 <SidebarGroup />

@@ -18,7 +18,7 @@ function RootLayout() {
 
     return (
         <MyUserProvider>
-            <SidebarProvider>
+            <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
 
                 <main
