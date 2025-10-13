@@ -36,7 +36,7 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
         <header
             id={id}
             className={cn(
-                "flex justify-between flex-wrap-reverse items-center gap-4 -m-8 mb-0 p-8",
+                "flex justify-between sticky top-0 z-50 flex-wrap-reverse items-center gap-4 -m-8 mb-8 px-8 pt-8 pb-4 bg-white/60 dark:bg-black/60 backdrop-blur-md dark:border-white/30 border-black/30 border-b",
                 className
             )}
         >
