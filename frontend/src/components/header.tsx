@@ -16,6 +16,8 @@ import {
     DropdownMenuContent,
 } from "./ui/dropdown-menu";
 
+import WorldictionaryIcon from "@/assets/icons/worldictionary.svg?react";
+
 export type HeaderProps = {
     id?: string;
     className?: string;
@@ -41,7 +43,8 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
             )}
         >
             <HistoryBreadcrumb className="w-screen" />
-            <Link to="/">
+            <Link className="flex gap-2 place-items-center" to="/">
+                <WorldictionaryIcon />
                 <h1 className="text-3xl font-bold">Worldictionary</h1>
             </Link>
             <div className="flex gap-4 flex-1 place-content-end">
