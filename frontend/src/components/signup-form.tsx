@@ -58,6 +58,15 @@ export type SignupFormDTO = z.infer<typeof SignupFormSchema>;
 export const SignupForm: FC = () => {
     const form = useForm({
         resolver: zodResolver(SignupFormSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+            "last-name": "",
+            "first-name": "",
+            gender: undefined,
+            birthday: undefined,
+            "confirm-password": "",
+        },
     });
 
     const Navigate = useNavigate();
@@ -117,9 +126,7 @@ export const SignupForm: FC = () => {
                                                     ? field.value.slice(1)
                                                     : field.value || ""
                                             }
-                                            onChange={(
-                                                e: React.ChangeEvent<HTMLInputElement>
-                                            ) =>
+                                            onChange={(e) =>
                                                 field.onChange({
                                                     ...e,
                                                     target: {
@@ -400,17 +407,7 @@ export const SignupForm: FC = () => {
                     type="reset"
                     variant="outline"
                     form="registration-form"
-                    onClick={(_e) =>
-                        form.reset({
-                            email: "",
-                            password: "",
-                            "last-name": "",
-                            "first-name": "",
-                            gender: undefined,
-                            birthday: undefined,
-                            "confirm-password": "",
-                        })
-                    }
+                    onClick={(_e) => form.reset()}
                 >
                     Clear
                 </Button>

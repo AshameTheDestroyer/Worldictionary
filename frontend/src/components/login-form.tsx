@@ -21,6 +21,10 @@ import {
 export const LoginForm: FC = () => {
     const form = useForm({
         resolver: zodResolver(LoginSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
     });
 
     const Navigate = useNavigate();
@@ -126,12 +130,7 @@ export const LoginForm: FC = () => {
                     type="reset"
                     variant="outline"
                     form="registration-form"
-                    onClick={(_e) =>
-                        form.reset({
-                            email: "",
-                            password: "",
-                        })
-                    }
+                    onClick={(_e) => form.reset()}
                 >
                     Clear
                 </Button>
