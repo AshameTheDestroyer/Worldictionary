@@ -31,7 +31,9 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
             )}
         >
             <div className="flex gap-4 place-items-center w-full">
-                {isMobile && <SidebarTrigger />}
+                {isMobile && !pathname.startsWith("/registration") && (
+                    <SidebarTrigger />
+                )}
                 <HistoryBreadcrumb />
             </div>
             <Link className="flex gap-2 place-items-center" to="/">

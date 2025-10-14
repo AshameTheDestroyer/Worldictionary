@@ -4,9 +4,9 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { useTheme } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { MyUserProvider } from "@/components/my-user-provider";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { useScreenSize } from "@/components/screen-size-provider";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -15,11 +15,12 @@ export const Route = createRootRoute({
 function RootLayout() {
     const { isDarkTheme } = useTheme();
     const { isScreenSize } = useScreenSize();
+    const { pathname } = useLocation();
 
     return (
         <MyUserProvider>
             <SidebarProvider defaultOpen={false}>
-                <AppSidebar />
+                {!pathname.startsWith("/registration") && <AppSidebar />}
 
                 <main
                     id="page"
