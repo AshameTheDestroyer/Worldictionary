@@ -1,5 +1,7 @@
 import { Handler } from "express";
 import { connection, mongo } from "mongoose";
+import { PostFile as PostFile_ } from "src/utils/PostFile";
+import { DeleteFileByID as DeleteFileByID_ } from "src/utils/DeleteFileByID";
 
 export const GetFile: Handler = async (request, response) => {
     try {
@@ -32,32 +34,28 @@ export const PostFile: Handler = async (request, response) => {
                 .json({ message: "No file was uploaded." });
         }
 
-        const { originalname, mimetype, buffer } = request.file;
+        const result = await PostFile_(request.file, connection.db);
+        response.status(201).json(result);
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send(error);
+    }
+};
 
-        const bucket = new mongo.GridFSBucket(connection.db, {
-            bucketName: "uploads",
-        });
+export const DeleteFileByID: Handler = async (request, response) => {
+    try {
+        const { id } = request.params;
 
-        const uploadStream = bucket.openUploadStream(originalname, {
-            contentType: mimetype,
-        });
-
-        uploadStream.end(buffer);
-
-        uploadStream.on("finish", () =>
-            response.status(201).json({
-                fileID: uploadStream.id,
-                message: "File uploaded successfully!",
-            })
-        );
-
-        uploadStream.on(
-            "error",
-            (error) => (
-                console.log(error),
-                response.status(500).json({ message: "Failed to upload file." })
+        await DeleteFileByID_(id, connection.db)
+            .then(() =>
+                response.status(204).send({ message: "File has been deleted." })
             )
-        );
+            .catch(
+                (error) => (
+                    console.log(error),
+                    response.status(404).send({ message: "File isn't found." })
+                )
+            );
     } catch (error) {
         console.log(error);
         return response.status(500).send(error);
