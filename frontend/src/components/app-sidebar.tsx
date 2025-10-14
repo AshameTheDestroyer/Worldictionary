@@ -15,6 +15,7 @@ import {
     SidebarFooter,
     SidebarHeader,
     SidebarContent,
+    SidebarTrigger,
 } from "./ui/sidebar";
 
 export const AppSidebar: FC = () => {
@@ -27,8 +28,21 @@ export const AppSidebar: FC = () => {
             className="dark:border-white/30 border-black/30"
             collapsible="icon"
         >
+            {!isMobile && (
+                <div
+                    className={cn(
+                        "flex flex-col gap-2 absolute right-2 z-10 top-2 w-max",
+                        !open &&
+                            "left-1/2 -translate-x-1/2 top-auto [&>button]:size-8 [&>button>svg]:size-6!"
+                    )}
+                >
+                    <SidebarTrigger />
+                    {!open && <Separator />}
+                </div>
+            )}
+
             {myUser != null && (open || isMobile) && (
-                <SidebarHeader className="flex flex-col gap-4">
+                <SidebarHeader className="flex flex-col gap-4 relative">
                     <div className="flex place-items-center gap-2">
                         <Avatar className="size-10">
                             <AvatarImage
@@ -66,7 +80,7 @@ export const AppSidebar: FC = () => {
                     "[&_[data-link]]:place-content-start [&_[data-link]]:-mx-2",
                     !open &&
                         !isMobile &&
-                        "[&_[data-link]_p]:hidden [&_[data-link]]:place-content-center [&_[data-link]]:size-8 [&_[data-link]]:mx-0 [&_[data-link]_svg]:size-6!"
+                        "mt-10 [&_[data-link]_p]:hidden [&_[data-link]]:place-content-center [&_[data-link]]:size-8 [&_[data-link]]:mx-0 [&_[data-link]_svg]:size-6!"
                 )}
             >
                 <SidebarGroup className="space-y-2">

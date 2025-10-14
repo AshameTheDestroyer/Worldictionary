@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 import { useMyUser } from "./my-user-provider";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
 import { Link, useLocation } from "@tanstack/react-router";
 import { QuickActionsDropdown } from "./quick-actions-dropdown";
@@ -19,6 +20,7 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
     const { pathname } = useLocation();
 
     const { token } = useMyUser();
+    const isMobile = useIsMobile();
 
     return (
         <header
@@ -29,7 +31,7 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
             )}
         >
             <div className="flex gap-4 place-items-center w-full">
-                <SidebarTrigger />
+                {isMobile && <SidebarTrigger />}
                 <HistoryBreadcrumb />
             </div>
             <Link className="flex gap-2 place-items-center" to="/">
