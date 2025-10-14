@@ -1,22 +1,12 @@
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "./ui/button";
-import { Spinner } from "./ui/spinner";
-import { Separator } from "./ui/separator";
 import { ModeToggle } from "./mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 import { useMyUser } from "./my-user-provider";
-import { HTTPManager } from "@/managers/HTTPManager";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-} from "./ui/dropdown-menu";
+import { QuickActionsDropdown } from "./quick-actions-dropdown";
 
 import WorldictionaryIcon from "@/assets/icons/worldictionary.svg?react";
 
@@ -28,13 +18,7 @@ export type HeaderProps = {
 export const Header: FC<HeaderProps> = ({ id, className }) => {
     const { pathname } = useLocation();
 
-    const {
-        token,
-        myUser,
-        Logout,
-        isLoggingOutPending,
-        isGettingMyUserLoading,
-    } = useMyUser();
+    const { token } = useMyUser();
 
     return (
         <header
@@ -66,50 +50,8 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                                 <Button>Login</Button>
                             </Link>
                         </div>
-                    ) : myUser != null && !isGettingMyUserLoading ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <Avatar className="size-9">
-                                    <AvatarImage
-                                        src={`${HTTPManager.defaults.baseURL}files/${myUser.image}`}
-                                    />
-                                    <AvatarFallback className="bg-emerald-500">
-                                        {myUser["first-name"][0].toUpperCase()}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem asChild>
-                                    <Link
-                                        className="w-full place-content-end!"
-                                        to="/profile"
-                                    >
-                                        Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                <Separator />
-                                <DropdownMenuItem
-                                    onClick={Logout}
-                                    disabled={isLoggingOutPending}
-                                >
-                                    <Spinner
-                                        className={cn(
-                                            "mr-auto",
-                                            !isLoggingOutPending && "invisible"
-                                        )}
-                                        aria-hidden={!isLoggingOutPending}
-                                    />
-                                    Log out
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
                     ) : (
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Spinner className="text-emerald-500 size-9 p-1" />
-                            </TooltipTrigger>
-                            <TooltipContent>Avatar's loading...</TooltipContent>
-                        </Tooltip>
+                        <QuickActionsDropdown />
                     ))}
                 <ModeToggle />
             </div>
