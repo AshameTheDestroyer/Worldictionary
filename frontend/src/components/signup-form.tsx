@@ -36,6 +36,7 @@ import {
     UserIcon,
     EyeOffIcon,
     VenusAndMarsIcon,
+    UserRoundPlusIcon,
 } from "lucide-react";
 
 export const SignupFormSchema = z
@@ -416,7 +417,7 @@ export const SignupForm: FC = () => {
                     disabled={isPending}
                     form="registration-form"
                 >
-                    {isPending && <Spinner />}
+                    {isPending ? <Spinner /> : <UserRoundPlusIcon />}
                     Signup
                 </Button>
             </div>

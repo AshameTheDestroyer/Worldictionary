@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import { LoginDTO, LoginSchema } from "../../../src/schemas/LoginSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
@@ -17,6 +16,13 @@ import {
     InputGroupAddon,
     InputGroupButton,
 } from "./ui/input-group";
+import {
+    EyeIcon,
+    LockIcon,
+    MailIcon,
+    LogInIcon,
+    EyeOffIcon,
+} from "lucide-react";
 
 export const LoginForm: FC = () => {
     const form = useForm({
@@ -139,7 +145,7 @@ export const LoginForm: FC = () => {
                     disabled={isPending}
                     form="registration-form"
                 >
-                    {isPending && <Spinner />}
+                    {isPending ? <Spinner /> : <LogInIcon />}
                     Login
                 </Button>
             </div>
