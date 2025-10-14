@@ -1,7 +1,12 @@
 import { cn } from "@/utils/cn";
 import { Input } from "./ui/input";
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
+import { queryClient } from "@/main";
+import { Spinner } from "./ui/spinner";
 import { FC, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { UserDTO } from "../../../src/schemas/UserSchema";
 import { CameraIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -26,8 +31,77 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
     user,
     className,
 }) => {
-    const [file, setFile] = useState<File>();
+    const defaultImageURL =
+        user.image != null
+            ? `${HTTPManager.defaults.baseURL}files/${user.image}`
+            : undefined;
+
+    const defaultFile =
+        defaultImageURL != null
+            ? new File([defaultImageURL], "avatar")
+            : undefined;
+
+    const [file, setFile] = useState(defaultFile);
+    const fileURL = file != null ? URL.createObjectURL(file) : defaultImageURL;
+
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const {
+        mutate: patchMyUserImage,
+        isPending: isPatchingMyUserImagePending,
+    } = useMutation({
+        mutationKey: ["PATCH-MY-USER-IMAGE"],
+        mutationFn: async (file: File) => {
+            const formData = new FormData();
+            formData.set("file", file, file.name);
+
+            return HTTPManager.patch("users/mine/image", formData, {
+                headers: {
+                    accept: "application/json",
+                    "Accept-Language": "en-US,en;q=0.8",
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then((response) => response.data)
+                .then((_data) => {
+                    HandleReset();
+                    toast.success("Successfully updated image!");
+                    queryClient.invalidateQueries({
+                        queryKey: ["GET-MY-USER"],
+                    });
+                })
+                .catch((error) =>
+                    toast.error(
+                        error?.response?.data?.message ?? error?.message
+                    )
+                );
+        },
+    });
+
+    const {
+        mutate: deleteMyUserImage,
+        isPending: isDeletingMyUserImagePending,
+    } = useMutation({
+        mutationKey: ["DELETE-MY-USER-IMAGE"],
+        mutationFn: async () =>
+            HTTPManager.delete("users/mine/image")
+                .then((response) => response.data)
+                .then((_data) => {
+                    HandleReset();
+                    toast.success("Successfully deleted image!");
+                    queryClient.invalidateQueries({
+                        queryKey: ["GET-MY-USER"],
+                    });
+                })
+                .catch((error) =>
+                    toast.error(
+                        error?.response?.data?.message ?? error?.message
+                    )
+                ),
+    });
+
+    const isPending =
+        isPatchingMyUserImagePending || isDeletingMyUserImagePending;
 
     function HandleReset() {
         setFile(undefined);
@@ -36,9 +110,19 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
         }
     }
 
+    function HandleUpdateImage() {
+        patchMyUserImage(file!);
+    }
+
+    function HandleDeleteImage() {
+        deleteMyUserImage();
+    }
+
     return (
         <Avatar id={id} className={cn("relative size-9", className)}>
-            <AvatarImage src={user.image} />
+            <AvatarImage
+                src={`${HTTPManager.defaults.baseURL}files/${user.image}`}
+            />
             <AvatarFallback className="bg-emerald-500 avatar-letter">
                 {user["first-name"][0].toUpperCase()}
             </AvatarFallback>
@@ -56,15 +140,9 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                     </DialogHeader>
 
                     <main className="flex gap-4 max-sm:flex-col place-content-center place-items-center">
-                        <Avatar
-                            key={inputRef.current?.value}
-                            className="size-32 max-sm:size-48"
-                        >
-                            {file != null && (
-                                <AvatarImage
-                                    src={URL.createObjectURL(file) ?? ""}
-                                />
-                            )}
+                        <Avatar className="size-32 max-sm:size-48">
+                            <AvatarImage src={fileURL} />
+                            <AvatarImage src={defaultImageURL} />
                             <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
                                 {user["first-name"][0].toUpperCase()}
                             </AvatarFallback>
@@ -90,23 +168,28 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                             <DialogFooter className="grid grid-cols-2 max-sm:flex max-sm:flex-col">
                                 <Button
                                     variant="destructive"
-                                    onClick={HandleReset}
-                                    disabled={file == null}
+                                    onClick={HandleDeleteImage}
+                                    disabled={
+                                        isPending ||
+                                        defaultImageURL == undefined
+                                    }
                                 >
-                                    <Trash2Icon />
+                                    {isPending ? <Spinner /> : <Trash2Icon />}
                                     Remove Picture
                                 </Button>
                                 <Button
                                     type="submit"
+                                    onClick={HandleUpdateImage}
                                     disabled={
-                                        (user.image != null || file == null) &&
-                                        (user.image == null ||
-                                            file == null ||
-                                            URL.createObjectURL(file) ==
-                                                user.image)
+                                        isPending ||
+                                        ((user.image != null || file == null) &&
+                                            (user.image == null ||
+                                                file == null ||
+                                                URL.createObjectURL(file) ==
+                                                    user.image))
                                     }
                                 >
-                                    <SaveIcon />
+                                    {isPending ? <Spinner /> : <SaveIcon />}
                                     Change Picture
                                 </Button>
                             </DialogFooter>
