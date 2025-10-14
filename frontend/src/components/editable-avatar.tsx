@@ -129,7 +129,7 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
 
             <Dialog onOpenChange={(open) => !open && HandleReset()}>
                 <DialogTrigger className="absolute cursor-pointer place-content-center place-items-center inset-0 size-full group hover:bg-black/30 focus-within:bg-black/30">
-                    <CameraIcon className="group-hover:opacity-100 group-focus-within:opacity-100 opacity-0 duration-300" />
+                    <CameraIcon className="group-hover:opacity-100 group-focus-within:opacity-100 opacity-0 duration-300 text-white" />
                 </DialogTrigger>
 
                 <DialogContent>

@@ -34,10 +34,10 @@ function RouteComponent() {
     }
 
     return (
-        <main className="flex-1 flex flex-col gap-16 max-sm:gap-8 p-8 max-sm:p-4">
-            <header className="flex gap-8 place-items-center max-sm:place-items-start max-sm:flex-wrap">
+        <main className="flex-1 flex flex-col gap-16 max-sm:gap-8 p-6 max-md:p-4 max-sm:p-2">
+            <header className="flex gap-8 place-items-center max-sm:place-items-start flex-wrap">
                 <EditableAvatar
-                    className="size-64 max-sm:size-16 [&_svg]:size-32 max-sm:[&_svg]:size-8 [&_.avatar-letter]:text-9xl max-sm:[&_.avatar-letter]:text-4xl"
+                    className="size-64 max-sm:size-32 [&_svg]:size-32 max-sm:[&_svg]:size-16 [&_.avatar-letter]:text-9xl max-sm:[&_.avatar-letter]:text-7xl"
                     user={myUser}
                 />
                 <div className="space-y-6">
