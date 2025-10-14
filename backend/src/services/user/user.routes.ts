@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Upload } from "src/middlewares/upload";
 import { Role } from "../../../../src/schemas/UserSchema";
 import {
     ValidateRateLimit,
@@ -14,6 +15,8 @@ import {
     PatchMyUser,
     GetUserByID,
     DeleteAllUsers,
+    PatchMyUserImage,
+    DeleteMyUserImage,
 } from "./user.services";
 
 export const USER_ROUTE = "/users";
@@ -51,6 +54,14 @@ UserRouter.post(
 );
 
 UserRouter.patch(
+    `${USER_ROUTE}/mine/image`,
+    ValidateAuthenticity,
+    ValidateRateLimit(),
+    Upload.single("file"),
+    PatchMyUserImage
+);
+
+UserRouter.patch(
     `${USER_ROUTE}/mine`,
     ValidateAuthenticity,
     ValidateRateLimit(),
@@ -63,6 +74,13 @@ UserRouter.patch(
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
     PatchUser
+);
+
+UserRouter.delete(
+    `${USER_ROUTE}/mine/image`,
+    ValidateAuthenticity,
+    ValidateRateLimit(),
+    DeleteMyUserImage
 );
 
 UserRouter.delete(
