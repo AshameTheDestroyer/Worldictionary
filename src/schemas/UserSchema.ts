@@ -11,8 +11,8 @@ export enum Role {
 }
 
 export const UserSchema = z.object({
-    image: z.url().optional(),
     email: z.email("required"),
+    image: z.string().optional(),
     role: z.enum(Role, "required"),
     password: z.string("required"),
     gender: z.enum(Gender, "required"),
