@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import { UserRouter } from "./services/user";
+import { FileRouter } from "./services/file";
 import { RegistrationRouter } from "./services/registration";
 
 dotenv.config();
@@ -25,6 +26,7 @@ async function ConnectDB() {
 ConnectDB();
 
 app.use(UserRouter);
+app.use(FileRouter);
 app.use(RegistrationRouter);
 
 app.listen(Number(process.env.PORT), () => {
