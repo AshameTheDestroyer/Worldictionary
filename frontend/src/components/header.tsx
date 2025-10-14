@@ -6,9 +6,10 @@ import { Separator } from "./ui/separator";
 import { ModeToggle } from "./mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 import { useMyUser } from "./my-user-provider";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { HistoryBreadcrumb } from "./history-breadcrumb";
 import { Link, useLocation } from "@tanstack/react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
     DropdownMenu,
@@ -69,6 +70,9 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Avatar className="size-9">
+                                    <AvatarImage
+                                        src={`${HTTPManager.defaults.baseURL}files/${myUser.image}`}
+                                    />
                                     <AvatarFallback className="bg-emerald-500">
                                         {myUser["first-name"][0].toUpperCase()}
                                     </AvatarFallback>

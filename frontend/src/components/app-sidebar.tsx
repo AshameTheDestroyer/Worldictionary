@@ -5,8 +5,9 @@ import { Separator } from "./ui/separator";
 import { Link } from "@tanstack/react-router";
 import { useMyUser } from "./my-user-provider";
 import { CopyableText } from "./copyable-text";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { HTTPManager } from "@/managers/HTTPManager";
 import { HomeIcon, UserRoundIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
     Sidebar,
     useSidebar,
@@ -30,6 +31,9 @@ export const AppSidebar: FC = () => {
                 <SidebarHeader className="flex flex-col gap-4">
                     <div className="flex place-items-center gap-2">
                         <Avatar className="size-10">
+                            <AvatarImage
+                                src={`${HTTPManager.defaults.baseURL}files/${myUser.image}`}
+                            />
                             <AvatarFallback className="bg-emerald-500">
                                 {myUser["first-name"][0].toUpperCase()}
                             </AvatarFallback>
