@@ -2,9 +2,9 @@ import { cn } from "@/utils/cn";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FC, useRef, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserDTO } from "../../../src/schemas/UserSchema";
 import { CameraIcon, SaveIcon, Trash2Icon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
     Dialog,
     DialogTitle,
@@ -29,13 +29,21 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
     const [file, setFile] = useState<File>();
     const inputRef = useRef<HTMLInputElement>(null);
 
+    function HandleReset() {
+        setFile(undefined);
+        if (inputRef.current != null) {
+            inputRef.current.value = "";
+        }
+    }
+
     return (
         <Avatar id={id} className={cn("relative size-9", className)}>
+            <AvatarImage src={user.image} />
             <AvatarFallback className="bg-emerald-500 avatar-letter">
                 {user["first-name"][0].toUpperCase()}
             </AvatarFallback>
 
-            <Dialog>
+            <Dialog onOpenChange={(open) => !open && HandleReset()}>
                 <DialogTrigger className="absolute cursor-pointer place-content-center place-items-center inset-0 size-full group hover:bg-black/30 focus-within:bg-black/30">
                     <CameraIcon className="group-hover:opacity-100 group-focus-within:opacity-100 opacity-0 duration-300" />
                 </DialogTrigger>
@@ -52,14 +60,14 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                             key={inputRef.current?.value}
                             className="size-32 max-sm:size-48"
                         >
-                            <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
-                                {user["first-name"][0].toUpperCase()}
-                            </AvatarFallback>
                             {file != null && (
                                 <AvatarImage
                                     src={URL.createObjectURL(file) ?? ""}
                                 />
                             )}
+                            <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
+                                {user["first-name"][0].toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
                         <div className="space-y-4">
                             <DialogDescription>
@@ -82,17 +90,22 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                             <DialogFooter className="grid grid-cols-2 max-sm:flex max-sm:flex-col">
                                 <Button
                                     variant="destructive"
+                                    onClick={HandleReset}
                                     disabled={file == null}
-                                    onClick={(_e) => (
-                                        inputRef.current != null &&
-                                            (inputRef.current.value = ""),
-                                        setFile(undefined)
-                                    )}
                                 >
                                     <Trash2Icon />
                                     Remove Picture
                                 </Button>
-                                <Button type="submit">
+                                <Button
+                                    type="submit"
+                                    disabled={
+                                        (user.image != null || file == null) &&
+                                        (user.image == null ||
+                                            file == null ||
+                                            URL.createObjectURL(file) ==
+                                                user.image)
+                                    }
+                                >
                                     <SaveIcon />
                                     Change Picture
                                 </Button>

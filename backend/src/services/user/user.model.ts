@@ -9,6 +9,7 @@ import {
 
 export const UserDBSchema = new Schema(
     {
+        image: String,
         birthday: Date,
         "last-name": String,
         role: { type: String, enum: Role },
