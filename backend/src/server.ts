@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
+import { AIRouter } from "./services/ai";
 import { UserRouter } from "./services/user";
 import { FileRouter } from "./services/file";
 import { RegistrationRouter } from "./services/registration";
@@ -25,6 +26,7 @@ async function ConnectDB() {
 
 ConnectDB();
 
+app.use(AIRouter);
 app.use(UserRouter);
 app.use(FileRouter);
 app.use(RegistrationRouter);
