@@ -1,8 +1,11 @@
 import toast from "react-hot-toast";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
-import { UserDTO } from "../../../src/schemas/UserSchema";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+    UserWithoutPasswordDTO,
+    UserWithoutPasswordSchema,
+} from "../../../src/schemas/UserSchema";
 import {
     FC,
     useState,
@@ -13,7 +16,7 @@ import {
 
 export type MyUserStateProps = {
     token?: string;
-    myUser?: UserDTO;
+    myUser?: UserWithoutPasswordDTO;
     Logout: () => void;
     isLoggingOutPending: boolean;
     isGettingMyUserLoading: boolean;
@@ -75,9 +78,13 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
         queryFn: () =>
             HTTPManager.get("users/mine")
                 .then((response) => response.data)
+                .then(UserWithoutPasswordSchema.parse)
                 .then((data) => ({
                     ...data,
-                    birthday: new Date(data.birthday),
+                    birthday:
+                        data.birthday != null
+                            ? new Date(data.birthday)
+                            : undefined,
                 }))
                 .then(
                     (data) => (

@@ -7,9 +7,9 @@ import { FC, useRef, useState } from "react";
 import { SpinnerIcon } from "./ui/spinner-icon";
 import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
-import { UserDTO } from "../../../src/schemas/UserSchema";
 import { CameraIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { UserWithoutPasswordDTO } from "../../../src/schemas/UserSchema";
 import {
     Dialog,
     DialogTitle,
@@ -22,8 +22,8 @@ import {
 
 export type EditableAvatarProps = {
     id?: string;
-    user: UserDTO;
     className?: string;
+    user: UserWithoutPasswordDTO;
 };
 
 export const EditableAvatar: FC<EditableAvatarProps> = ({

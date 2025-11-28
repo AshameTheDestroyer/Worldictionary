@@ -35,4 +35,7 @@ export const UserSchema = z.object({
         .optional(),
 });
 
+export const UserWithoutPasswordSchema = UserSchema.omit({ password: true });
+
 export type UserDTO = z.infer<typeof UserSchema>;
+export type UserWithoutPasswordDTO = z.infer<typeof UserWithoutPasswordSchema>;

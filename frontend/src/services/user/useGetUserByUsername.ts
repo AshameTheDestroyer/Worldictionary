@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
-import { UserSchema } from "../../../../src/schemas/UserSchema";
+import { UserWithoutPasswordSchema } from "../../../../src/schemas/UserSchema";
 
 export const GET_USER_BY_USERNAME_KEY = "GET-USER-BY-USERNAME";
 
@@ -10,5 +10,5 @@ export const useGetUserByUsername = (username: string) =>
         queryFn: () =>
             HTTPManager.get(`/users/${username.replace(/^@/, "")}`)
                 .then((response) => response.data)
-                .then(UserSchema.parse),
+                .then(UserWithoutPasswordSchema.parse),
     });

@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { Page } from "@/components/page";
 import { Link } from "@tanstack/react-router";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SpinnerIcon } from "@/components/ui/spinner-icon";
 import { ProfileForm } from "@/components/profile-form";
 import { Role } from "../../../../src/schemas/UserSchema";
 import { CopyableText } from "@/components/copyable-text";
@@ -10,8 +10,8 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { StateDisplay } from "@/components/state-display";
 import { EditableAvatar } from "@/components/editable-avatar";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import { CakeIcon, MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
-import { Badge, CakeIcon, MarsIcon, StarIcon, VenusIcon } from "lucide-react";
 import {
     Card,
     CardTitle,
@@ -34,7 +34,7 @@ function RouteComponent() {
         data: user,
     } = useGetUserByUsername(username);
 
-    if (user == null || isLoading) {
+    if (user == null) {
         return (
             <Page id="profile-page" className="place-content-center">
                 <StateDisplay
@@ -115,7 +115,9 @@ function RouteComponent() {
             <Separator />
 
             <Card className="max-w-[30rem]">
-                <CardTitle className="text-2xl">My Cards</CardTitle>
+                <CardHeader>
+                    <CardTitle className="text-2xl">My Cards</CardTitle>
+                </CardHeader>
                 <CardContent>
                     <p>You have 99 saved cards!</p>
                 </CardContent>

@@ -11,8 +11,12 @@ import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";
-import { Gender, UserDTO, UserSchema } from "../../../src/schemas/UserSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import {
+    Gender,
+    UserSchema,
+    UserWithoutPasswordDTO,
+} from "../../../src/schemas/UserSchema";
 import {
     InputGroup,
     InputGroupText,
@@ -35,7 +39,7 @@ export const ProfileFormSchema = UserSchema.omit({
 export type ProfileFormDTO = z.infer<typeof ProfileFormSchema>;
 
 export type ProfileFormProps = {
-    user: UserDTO;
+    user: UserWithoutPasswordDTO;
 };
 
 export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
