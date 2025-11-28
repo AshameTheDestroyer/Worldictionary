@@ -32,11 +32,12 @@ export const AppSidebar: FC = () => {
                 <div
                     className={cn(
                         "flex flex-col gap-2 absolute right-2 z-10 top-2 w-max",
-                        !open &&
-                            "left-1/2 -translate-x-1/2 top-auto [&>button]:size-8 [&>button>svg]:size-6!"
+                        !open && "left-1/2 -translate-x-1/2 top-auto"
                     )}
                 >
-                    <SidebarTrigger />
+                    <SidebarTrigger
+                        className={cn(!open && "size-8 [&>svg]:size-6!")}
+                    />
                     {!open && <Separator />}
                 </div>
             )}
