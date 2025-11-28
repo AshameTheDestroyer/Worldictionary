@@ -86,7 +86,7 @@ export const AppSidebar: FC = () => {
             >
                 <SidebarGroup className="space-y-2">
                     <Button data-link asChild variant="ghost">
-                        <Link to="/">
+                        <Link to="/home">
                             <HomeIcon />
                             <p>Home</p>
                         </Link>
