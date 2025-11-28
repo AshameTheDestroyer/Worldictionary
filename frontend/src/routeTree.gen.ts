@@ -10,18 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegistrationRouteImport } from './routes/registration'
-import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MyCardsRouteImport } from './routes/my-cards'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProfileIndexRouteImport } from './routes/profile/index'
+import { Route as ProfileUsernameRouteImport } from './routes/profile/$username'
 
 const RegistrationRoute = RegistrationRouteImport.update({
   id: '/registration',
   path: '/registration',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+const MyCardsRoute = MyCardsRouteImport.update({
+  id: '/my-cards',
+  path: '/my-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -34,39 +36,76 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileUsernameRoute = ProfileUsernameRouteImport.update({
+  id: '/profile/$username',
+  path: '/profile/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRoute
+  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
+  '/profile/$username': typeof ProfileUsernameRoute
+  '/profile': typeof ProfileIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRoute
+  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
+  '/profile/$username': typeof ProfileUsernameRoute
+  '/profile': typeof ProfileIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/profile': typeof ProfileRoute
+  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
+  '/profile/$username': typeof ProfileUsernameRoute
+  '/profile/': typeof ProfileIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/profile' | '/registration'
+  fullPaths:
+    | '/'
+    | '/home'
+    | '/my-cards'
+    | '/registration'
+    | '/profile/$username'
+    | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/profile' | '/registration'
-  id: '__root__' | '/' | '/home' | '/profile' | '/registration'
+  to:
+    | '/'
+    | '/home'
+    | '/my-cards'
+    | '/registration'
+    | '/profile/$username'
+    | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/home'
+    | '/my-cards'
+    | '/registration'
+    | '/profile/$username'
+    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
-  ProfileRoute: typeof ProfileRoute
+  MyCardsRoute: typeof MyCardsRoute
   RegistrationRoute: typeof RegistrationRoute
+  ProfileUsernameRoute: typeof ProfileUsernameRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +117,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegistrationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
+    '/my-cards': {
+      id: '/my-cards'
+      path: '/my-cards'
+      fullPath: '/my-cards'
+      preLoaderRoute: typeof MyCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -99,14 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/$username': {
+      id: '/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof ProfileUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
-  ProfileRoute: ProfileRoute,
+  MyCardsRoute: MyCardsRoute,
   RegistrationRoute: RegistrationRoute,
+  ProfileUsernameRoute: ProfileUsernameRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
