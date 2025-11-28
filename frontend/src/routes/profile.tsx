@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { Page } from "@/components/page";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
@@ -24,18 +25,18 @@ function RouteComponent() {
 
     if (myUser == null || isGettingMyUserLoading) {
         return (
-            <main className="flex-1 flex place-content-center place-items-center">
+            <Page id="profile-page" className="place-content-center">
                 <div className="flex flex-col gap-4 place-items-center">
                     <Spinner className="size-9 p-1" />
                     <p>Currently loading profile...</p>
                 </div>
-            </main>
+            </Page>
         );
     }
 
     return (
-        <main className="flex-1 flex flex-col gap-16 max-sm:gap-8 p-6 max-md:p-4 max-sm:p-2">
-            <header className="flex gap-8 place-items-center max-sm:place-items-start flex-wrap">
+        <Page id="profile-page">
+            <header className="flex gap-8 px-8 pt-8 place-items-center max-sm:place-items-start flex-wrap">
                 <EditableAvatar
                     className="size-64 max-sm:size-32 [&_svg]:size-32 max-sm:[&_svg]:size-16 [&_.avatar-letter]:text-9xl max-sm:[&_.avatar-letter]:text-7xl"
                     user={myUser}
@@ -102,6 +103,6 @@ function RouteComponent() {
                     <ProfileForm user={myUser} />
                 </CardContent>
             </Card>
-        </main>
+        </Page>
     );
 }
