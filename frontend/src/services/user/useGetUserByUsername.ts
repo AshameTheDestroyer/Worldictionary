@@ -10,5 +10,8 @@ export const useGetUserByUsername = (username: string) =>
         queryFn: () =>
             HTTPManager.get(`/users/${username.replace(/^@/, "")}`)
                 .then((response) => response.data)
-                .then(UserWithoutPasswordSchema.parse),
+                .then(UserWithoutPasswordSchema.parse)
+                .catch((error) =>
+                    error.status == 404 ? null : Promise.reject(error)
+                ),
     });

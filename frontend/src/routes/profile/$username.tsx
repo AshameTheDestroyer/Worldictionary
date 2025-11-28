@@ -27,21 +27,15 @@ export const Route = createFileRoute("/profile/$username")({
 function RouteComponent() {
     const { username } = useParams({ from: "/profile/$username" });
 
-    const {
-        refetch,
-        isError,
-        isLoading,
-        data: user,
-    } = useGetUserByUsername(username);
+    const userQuery = useGetUserByUsername(username);
+    const user = userQuery.data;
 
     if (user == null) {
         return (
             <Page id="profile-page" className="place-content-center">
                 <StateDisplay
-                    data={user}
-                    refetch={refetch}
-                    isError={isError}
-                    isLoading={isLoading}
+                    {...userQuery}
+                    onEmpty="redirect"
                     messages={{
                         refetch: "Retry",
                         empty: "User profile not found.",
