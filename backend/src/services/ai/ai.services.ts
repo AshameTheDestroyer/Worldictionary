@@ -1,21 +1,17 @@
 import { Handler } from "express";
 import { AIAssistant } from "./ai.model";
 
-export const PromptAI: Handler = async (request, response) => {
+export const ChatWithAI: Handler = async (request, response) => {
     try {
-        const { prompt } = request.body;
-
-        const AIResponse = await AIAssistant.Model.models.generateContent({
-            contents: prompt,
-            model: process.env.AI_MODEL,
-            config: {
-                temperature: Number(process.env.AI_TEMPERATURE),
-                systemInstruction: process.env.AI_SYSTEM_INSTRUCTIONS,
-            },
-        });
+        const { prompt, conversationID: _conversationID } = request.body;
+        const { message, conversationID } = await AIAssistant.Chat(
+            prompt,
+            _conversationID
+        );
 
         response.status(200).json({
-            message: AIResponse.text,
+            message,
+            conversationID,
         });
     } catch (error) {
         console.log(error);
