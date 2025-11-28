@@ -3,8 +3,8 @@ import { Input } from "./ui/input";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { queryClient } from "@/main";
-import { Spinner } from "./ui/spinner";
 import { FC, useRef, useState } from "react";
+import { SpinnerIcon } from "./ui/spinner-icon";
 import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { UserDTO } from "../../../src/schemas/UserSchema";
@@ -174,7 +174,11 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                                         defaultImageURL == undefined
                                     }
                                 >
-                                    {isPending ? <Spinner /> : <Trash2Icon />}
+                                    {isPending ? (
+                                        <SpinnerIcon />
+                                    ) : (
+                                        <Trash2Icon />
+                                    )}
                                     Remove Picture
                                 </Button>
                                 <Button
@@ -189,7 +193,7 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                                                     user.image))
                                     }
                                 >
-                                    {isPending ? <Spinner /> : <SaveIcon />}
+                                    {isPending ? <SpinnerIcon /> : <SaveIcon />}
                                     Change Picture
                                 </Button>
                             </DialogFooter>

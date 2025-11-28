@@ -1,9 +1,9 @@
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { FC, useState } from "react";
-import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
 import { useMyUser } from "./my-user-provider";
+import { SpinnerIcon } from "./ui/spinner-icon";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
@@ -145,7 +145,7 @@ export const LoginForm: FC = () => {
                     disabled={isPending}
                     form="registration-form"
                 >
-                    {isPending ? <Spinner /> : <LogInIcon />}
+                    {isPending ? <SpinnerIcon /> : <LogInIcon />}
                     Login
                 </Button>
             </div>

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { Button } from "./ui/button";
-import { Spinner } from "./ui/spinner";
 import { Separator } from "./ui/separator";
 import { Link } from "@tanstack/react-router";
 import { useMyUser } from "./my-user-provider";
+import { SpinnerIcon } from "./ui/spinner-icon";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { LogOutIcon, UserRoundIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -33,7 +33,7 @@ export const QuickActionsDropdown: FC = () => {
         return (
             <Tooltip>
                 <TooltipTrigger>
-                    <Spinner className="text-emerald-500 size-9 p-1" />
+                    <SpinnerIcon className="text-emerald-500 size-9 p-1" />
                 </TooltipTrigger>
                 <TooltipContent>Avatar's loading...</TooltipContent>
             </Tooltip>
@@ -92,7 +92,7 @@ export const QuickActionsDropdown: FC = () => {
                             disabled={isLoggingOutPending}
                             onClick={(_e) => setIsLogoutDialogOpen(false)}
                         >
-                            {isLoggingOutPending && <Spinner />}
+                            {isLoggingOutPending && <SpinnerIcon />}
                             No, Keep Logged in
                         </Button>
                         <Button
@@ -100,7 +100,11 @@ export const QuickActionsDropdown: FC = () => {
                             onClick={Logout}
                             disabled={isLoggingOutPending}
                         >
-                            {isLoggingOutPending ? <Spinner /> : <LogOutIcon />}
+                            {isLoggingOutPending ? (
+                                <SpinnerIcon />
+                            ) : (
+                                <LogOutIcon />
+                            )}
                             Yes, Log out
                         </Button>
                     </DialogFooter>

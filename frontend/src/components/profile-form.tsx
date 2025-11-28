@@ -4,9 +4,9 @@ import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { queryClient } from "@/main";
-import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "./date-picker";
+import { SpinnerIcon } from "./ui/spinner-icon";
 import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -293,7 +293,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                     form="profile-form"
                     disabled={isPending || !form.formState.isDirty}
                 >
-                    {isPending && <Spinner />}
+                    {isPending && <SpinnerIcon />}
                     Update
                 </Button>
             </div>

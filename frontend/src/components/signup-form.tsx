@@ -3,10 +3,10 @@ import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { FC, useState } from "react";
-import { Spinner } from "./ui/spinner";
 import { useForm } from "react-hook-form";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
+import { SpinnerIcon } from "./ui/spinner-icon";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
@@ -15,18 +15,18 @@ import { Gender } from "../../../src/schemas/UserSchema";
 import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormItem, FormField, FormLabel, FormControl } from "./ui/form";
 import {
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+} from "./ui/dropdown-menu";
+import {
     InputGroup,
     InputGroupText,
     InputGroupAddon,
     InputGroupInput,
     InputGroupButton,
 } from "./ui/input-group";
-import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-} from "./ui/dropdown-menu";
 import {
     TagIcon,
     EyeIcon,
@@ -417,7 +417,7 @@ export const SignupForm: FC = () => {
                     disabled={isPending}
                     form="registration-form"
                 >
-                    {isPending ? <Spinner /> : <UserRoundPlusIcon />}
+                    {isPending ? <SpinnerIcon /> : <UserRoundPlusIcon />}
                     Signup
                 </Button>
             </div>
