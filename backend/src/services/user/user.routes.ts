@@ -13,9 +13,9 @@ import {
     GetMyUser,
     DeleteUser,
     PatchMyUser,
-    GetUserByID,
     DeleteAllUsers,
     PatchMyUserImage,
+    GetUserByUsername,
     DeleteMyUserImage,
 } from "./user.services";
 
@@ -38,11 +38,11 @@ UserRouter.get(
 );
 
 UserRouter.get(
-    `${USER_ROUTE}/:id`,
+    `${USER_ROUTE}/:username`,
     ValidateAuthenticity,
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
-    GetUserByID
+    GetUserByUsername
 );
 
 UserRouter.post(
@@ -69,7 +69,7 @@ UserRouter.patch(
 );
 
 UserRouter.patch(
-    `${USER_ROUTE}/:id`,
+    `${USER_ROUTE}/:username`,
     ValidateAuthenticity,
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),
@@ -92,7 +92,7 @@ UserRouter.delete(
 );
 
 UserRouter.delete(
-    `${USER_ROUTE}/:id`,
+    `${USER_ROUTE}/:username`,
     ValidateAuthenticity,
     ValidateAuthority(Role.admin),
     ValidateRateLimit({ checkRole: true }),

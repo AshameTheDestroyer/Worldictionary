@@ -8,7 +8,6 @@ import {
     GetDocuments,
     PostDocument,
     PatchDocument,
-    GetDocumentByID,
     DeleteDocumentByID,
     DeleteAllDocuments,
 } from "src/utils";
@@ -21,13 +20,29 @@ export const GetUsers = GetDocuments(
     "-_resetTokenExpirationDate"
 );
 
-export const GetUserByID = GetDocumentByID(
-    UserModel,
-    "-password",
-    "-_loginToken",
-    "-_resetToken",
-    "-_resetTokenExpirationDate"
-);
+export const GetUserByUsername: Handler = async (request, response) => {
+    try {
+        const { username } = request.params;
+
+        const user = await UserModel.findOne({
+            username: `@${username}`,
+        }).select([
+            "-password",
+            "-_loginToken",
+            "-_resetToken",
+            "-_resetTokenExpirationDate",
+        ]);
+
+        if (user == null) {
+            return response.status(404).json({ message: "User isn't found." });
+        }
+
+        return response.json(user);
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send(error);
+    }
+};
 
 export const GetMyUser: Handler = async (request, response) => {
     try {
