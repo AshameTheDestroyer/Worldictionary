@@ -23,6 +23,7 @@ import {
 export type EditableAvatarProps = {
     id?: string;
     className?: string;
+    nonEditable?: boolean;
     user: UserWithoutPasswordDTO;
 };
 
@@ -30,6 +31,7 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
     id,
     user,
     className,
+    nonEditable,
 }) => {
     const defaultImageURL =
         user.image != null
@@ -93,80 +95,87 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
                 {user["first-name"][0].toUpperCase()}
             </AvatarFallback>
 
-            <Dialog onOpenChange={(open) => !open && HandleReset()}>
-                <DialogTrigger className="absolute cursor-pointer place-content-center place-items-center inset-0 size-full group hover:bg-black/30 focus-within:bg-black/30">
-                    <CameraIcon className="group-hover:opacity-100 group-focus-within:opacity-100 opacity-0 duration-300 text-white" />
-                </DialogTrigger>
+            {!nonEditable && (
+                <Dialog onOpenChange={(open) => !open && HandleReset()}>
+                    <DialogTrigger className="absolute cursor-pointer place-content-center place-items-center inset-0 size-full group hover:bg-black/30 focus-within:bg-black/30">
+                        <CameraIcon className="group-hover:opacity-100 group-focus-within:opacity-100 opacity-0 duration-300 text-white" />
+                    </DialogTrigger>
 
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-start">
-                            Change Profile Picture
-                        </DialogTitle>
-                    </DialogHeader>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle className="text-start">
+                                Change Profile Picture
+                            </DialogTitle>
+                        </DialogHeader>
 
-                    <main className="flex gap-4 max-sm:flex-col place-content-center place-items-center">
-                        <Avatar className="size-32 max-sm:size-48">
-                            <AvatarImage src={fileURL} />
-                            <AvatarImage src={defaultImageURL} />
-                            <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
-                                {user["first-name"][0].toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="space-y-4">
-                            <DialogDescription>
-                                Please upload an image to change your profile
-                                picture, or you can just remove it.
-                            </DialogDescription>
+                        <main className="flex gap-4 max-sm:flex-col place-content-center place-items-center">
+                            <Avatar className="size-32 max-sm:size-48">
+                                <AvatarImage src={fileURL} />
+                                <AvatarImage src={defaultImageURL} />
+                                <AvatarFallback className="bg-emerald-500 text-6xl max-sm:text-9xl">
+                                    {user["first-name"][0].toUpperCase()}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="space-y-4">
+                                <DialogDescription>
+                                    Please upload an image to change your
+                                    profile picture, or you can just remove it.
+                                </DialogDescription>
 
-                            <Input
-                                ref={inputRef}
-                                className="cursor-pointer!"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) =>
-                                    setFile(
-                                        e.target.files?.item(0) ?? undefined
-                                    )
-                                }
-                            />
-
-                            <DialogFooter className="grid grid-cols-2 max-sm:flex max-sm:flex-col">
-                                <Button
-                                    variant="destructive"
-                                    onClick={HandleDeleteImage}
-                                    disabled={
-                                        isPending ||
-                                        defaultImageURL == undefined
+                                <Input
+                                    ref={inputRef}
+                                    className="cursor-pointer!"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) =>
+                                        setFile(
+                                            e.target.files?.item(0) ?? undefined
+                                        )
                                     }
-                                >
-                                    {isPending ? (
-                                        <SpinnerIcon />
-                                    ) : (
-                                        <Trash2Icon />
-                                    )}
-                                    Remove Picture
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    onClick={HandleUpdateImage}
-                                    disabled={
-                                        isPending ||
-                                        ((user.image != null || file == null) &&
-                                            (user.image == null ||
-                                                file == null ||
-                                                URL.createObjectURL(file) ==
-                                                    user.image))
-                                    }
-                                >
-                                    {isPending ? <SpinnerIcon /> : <SaveIcon />}
-                                    Change Picture
-                                </Button>
-                            </DialogFooter>
-                        </div>
-                    </main>
-                </DialogContent>
-            </Dialog>
+                                />
+
+                                <DialogFooter className="grid grid-cols-2 max-sm:flex max-sm:flex-col">
+                                    <Button
+                                        variant="destructive"
+                                        onClick={HandleDeleteImage}
+                                        disabled={
+                                            isPending ||
+                                            defaultImageURL == undefined
+                                        }
+                                    >
+                                        {isPending ? (
+                                            <SpinnerIcon />
+                                        ) : (
+                                            <Trash2Icon />
+                                        )}
+                                        Remove Picture
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        onClick={HandleUpdateImage}
+                                        disabled={
+                                            isPending ||
+                                            ((user.image != null ||
+                                                file == null) &&
+                                                (user.image == null ||
+                                                    file == null ||
+                                                    URL.createObjectURL(file) ==
+                                                        user.image))
+                                        }
+                                    >
+                                        {isPending ? (
+                                            <SpinnerIcon />
+                                        ) : (
+                                            <SaveIcon />
+                                        )}
+                                        Change Picture
+                                    </Button>
+                                </DialogFooter>
+                            </div>
+                        </main>
+                    </DialogContent>
+                </Dialog>
+            )}
         </Avatar>
     );
 };

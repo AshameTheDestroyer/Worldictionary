@@ -1,9 +1,10 @@
 import { FC } from "react";
 import { format } from "date-fns";
-import { Link, useLocation } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { CopyableText } from "@/components/copyable-text";
+import { useMyUser } from "@/components/my-user-provider";
 import { EditableAvatar } from "@/components/editable-avatar";
+import { Link, Navigate, useLocation } from "@tanstack/react-router";
 import {
     Role,
     UserWithoutPasswordDTO,
@@ -27,12 +28,18 @@ export type ProfileHeaderProps = {
 
 export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
     const { pathname } = useLocation();
+    const { myUser, token } = useMyUser();
+
+    if (myUser == null || token == null) {
+        return <Navigate to="/registration" search={{ mode: "login" }} />;
+    }
 
     return (
         <header className="flex gap-8 p-8 place-items-center max-sm:place-items-start flex-wrap">
             <EditableAvatar
                 className="size-64 max-sm:size-32 [&_svg]:size-32 max-sm:[&_svg]:size-16 [&_.avatar-letter]:text-9xl max-sm:[&_.avatar-letter]:text-7xl"
                 user={user}
+                nonEditable={myUser.username != user.username}
             />
 
             <div className="relative pr-12 flex flex-col gap-6">
@@ -85,22 +92,25 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
                     )}
                 </div>
 
-                {!pathname.endsWith("/edit") && (
-                    <Tooltip>
-                        <TooltipTrigger
-                            className="absolute top-0.5 right-0 cursor-pointer p-1.5 -translate-y-1 aspect-square"
-                            asChild
-                        >
-                            <Link
-                                to="/profile/$username/edit"
-                                params={{ username: user.username.slice(1) }}
+                {!pathname.endsWith("/edit") &&
+                    myUser.username == user.username && (
+                        <Tooltip>
+                            <TooltipTrigger
+                                className="absolute top-0.5 right-0 cursor-pointer p-1.5 -translate-y-1 aspect-square"
+                                asChild
                             >
-                                <SettingsIcon className="size-9!" />
-                            </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>Edit Profile</TooltipContent>
-                    </Tooltip>
-                )}
+                                <Link
+                                    to="/profile/$username/edit"
+                                    params={{
+                                        username: user.username.slice(1),
+                                    }}
+                                >
+                                    <SettingsIcon className="size-9!" />
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>Edit Profile</TooltipContent>
+                        </Tooltip>
+                    )}
             </div>
         </header>
     );
