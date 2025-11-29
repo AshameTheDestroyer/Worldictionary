@@ -10,22 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegistrationRouteImport } from './routes/registration'
-import { Route as MyCardsRouteImport } from './routes/my-cards'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as ProfileUsernameRouteRouteImport } from './routes/profile/$username/route'
 import { Route as ProfileUsernameIndexRouteImport } from './routes/profile/$username/index'
+import { Route as ProfileUsernameCardsRouteImport } from './routes/profile/$username_.cards'
 import { Route as ProfileUsernameEditRouteImport } from './routes/profile/$username/edit'
 
 const RegistrationRoute = RegistrationRouteImport.update({
   id: '/registration',
   path: '/registration',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MyCardsRoute = MyCardsRouteImport.update({
-  id: '/my-cards',
-  path: '/my-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -53,6 +48,11 @@ const ProfileUsernameIndexRoute = ProfileUsernameIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ProfileUsernameRouteRoute,
 } as any)
+const ProfileUsernameCardsRoute = ProfileUsernameCardsRouteImport.update({
+  id: '/profile/$username_/cards',
+  path: '/profile/$username/cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileUsernameEditRoute = ProfileUsernameEditRouteImport.update({
   id: '/edit',
   path: '/edit',
@@ -62,31 +62,31 @@ const ProfileUsernameEditRoute = ProfileUsernameEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
   '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/profile': typeof ProfileIndexRoute
   '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username/': typeof ProfileUsernameIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
   '/profile': typeof ProfileIndexRoute
   '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username': typeof ProfileUsernameIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/home': typeof HomeRoute
-  '/my-cards': typeof MyCardsRoute
   '/registration': typeof RegistrationRoute
   '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/profile/': typeof ProfileIndexRoute
   '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username_/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username/': typeof ProfileUsernameIndexRoute
 }
 export interface FileRouteTypes {
@@ -94,40 +94,40 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/home'
-    | '/my-cards'
     | '/registration'
     | '/profile/$username'
     | '/profile'
     | '/profile/$username/edit'
+    | '/profile/$username/cards'
     | '/profile/$username/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/home'
-    | '/my-cards'
     | '/registration'
     | '/profile'
     | '/profile/$username/edit'
+    | '/profile/$username/cards'
     | '/profile/$username'
   id:
     | '__root__'
     | '/'
     | '/home'
-    | '/my-cards'
     | '/registration'
     | '/profile/$username'
     | '/profile/'
     | '/profile/$username/edit'
+    | '/profile/$username_/cards'
     | '/profile/$username/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HomeRoute: typeof HomeRoute
-  MyCardsRoute: typeof MyCardsRoute
   RegistrationRoute: typeof RegistrationRoute
   ProfileUsernameRouteRoute: typeof ProfileUsernameRouteRouteWithChildren
   ProfileIndexRoute: typeof ProfileIndexRoute
+  ProfileUsernameCardsRoute: typeof ProfileUsernameCardsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,13 +137,6 @@ declare module '@tanstack/react-router' {
       path: '/registration'
       fullPath: '/registration'
       preLoaderRoute: typeof RegistrationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/my-cards': {
-      id: '/my-cards'
-      path: '/my-cards'
-      fullPath: '/my-cards'
-      preLoaderRoute: typeof MyCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -181,6 +174,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileUsernameIndexRouteImport
       parentRoute: typeof ProfileUsernameRouteRoute
     }
+    '/profile/$username_/cards': {
+      id: '/profile/$username_/cards'
+      path: '/profile/$username/cards'
+      fullPath: '/profile/$username/cards'
+      preLoaderRoute: typeof ProfileUsernameCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/$username/edit': {
       id: '/profile/$username/edit'
       path: '/edit'
@@ -207,10 +207,10 @@ const ProfileUsernameRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HomeRoute: HomeRoute,
-  MyCardsRoute: MyCardsRoute,
   RegistrationRoute: RegistrationRoute,
   ProfileUsernameRouteRoute: ProfileUsernameRouteRouteWithChildren,
   ProfileIndexRoute: ProfileIndexRoute,
+  ProfileUsernameCardsRoute: ProfileUsernameCardsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

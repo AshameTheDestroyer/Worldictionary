@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { Link, useParams } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 import {
     Card,
@@ -14,6 +14,8 @@ export const Route = createFileRoute("/profile/$username/")({
 });
 
 function RouteComponent() {
+    const { username } = useParams({ from: "/profile/$username" });
+
     return (
         <Card className="max-w-[30rem]">
             <CardHeader>
@@ -24,7 +26,9 @@ function RouteComponent() {
             </CardContent>
             <CardFooter>
                 <Button className="w-full" data-link asChild>
-                    <Link to="/profile">View Cards</Link>
+                    <Link to="/profile/$username/cards" params={{ username }}>
+                        View Cards
+                    </Link>
                 </Button>
             </CardFooter>
         </Card>
