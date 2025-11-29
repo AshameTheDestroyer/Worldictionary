@@ -9,7 +9,7 @@ export const useLogin = (
 ) =>
     useMutation({
         ...options,
-        mutationKey: ["LOGIN"],
+        mutationKey: [LOGIN_KEY],
         mutationFn: (data) =>
             HTTPManager.post("registration/login", data)
                 .then((response) => response.data.token)

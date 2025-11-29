@@ -7,12 +7,11 @@ import { useForm } from "react-hook-form";
 import { Separator } from "./ui/separator";
 import { DatePicker } from "./date-picker";
 import { SpinnerIcon } from "./ui/spinner-icon";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "../../../src/schemas/UserSchema";
-import { SignupDTO, SignupSchema } from "../../../src/schemas/SignupSchema";
+import { useSignup } from "@/services/registration/useSignup";
+import { SignupSchema } from "../../../src/schemas/SignupSchema";
 import { Form, FormItem, FormField, FormLabel, FormControl } from "./ui/form";
 import {
     DropdownMenu,
@@ -72,23 +71,14 @@ export const SignupForm: FC = () => {
 
     const Navigate = useNavigate();
 
-    const { mutate, isPending } = useMutation({
-        mutationKey: ["SIGNUP"],
-        mutationFn: (data: SignupDTO) =>
-            HTTPManager.post("registration/signup", data)
-                .then((response) => response.data)
-                .then((_data) => {
-                    toast.success("Successfully signed up!");
-                    Navigate({
-                        to: "/registration",
-                        search: { mode: "login" },
-                    });
-                })
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                ),
+    const { mutate, isPending } = useSignup({
+        onSuccess: () => {
+            toast.success("Successfully signed up!");
+            Navigate({
+                to: "/registration",
+                search: { mode: "login" },
+            });
+        },
     });
 
     function HandleSubmit(data: SignupFormDTO) {
