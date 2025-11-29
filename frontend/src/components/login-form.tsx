@@ -4,10 +4,9 @@ import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMyUser } from "./my-user-provider";
 import { SpinnerIcon } from "./ui/spinner-icon";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "@/services/registration/useLogin";
 import { LoginDTO, LoginSchema } from "../../../src/schemas/LoginSchema";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
@@ -36,22 +35,12 @@ export const LoginForm: FC = () => {
     const Navigate = useNavigate();
     const { setToken } = useMyUser();
 
-    const { mutate, isPending } = useMutation({
-        mutationKey: ["LOGIN"],
-        mutationFn: (data: LoginDTO) =>
-            HTTPManager.post("registration/login", data)
-                .then((response) => response.data.token)
-                .then((token) => {
-                    setToken(token);
-                    localStorage.setItem("token", token);
-                    toast.success("Successfully logged in!");
-                    Navigate({ to: "/" });
-                })
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                ),
+    const { mutate, isPending } = useLogin({
+        onSuccess: (token) => {
+            setToken(token);
+            toast.success("Successfully logged in!");
+            Navigate({ to: "/" });
+        },
     });
 
     function HandleSubmit(data: LoginDTO) {
