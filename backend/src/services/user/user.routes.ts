@@ -40,8 +40,7 @@ UserRouter.get(
 UserRouter.get(
     `${USER_ROUTE}/:username`,
     ValidateAuthenticity,
-    ValidateAuthority(Role.admin),
-    ValidateRateLimit({ checkRole: true }),
+    ValidateRateLimit(),
     GetUserByUsername
 );
 
