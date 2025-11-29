@@ -2,14 +2,14 @@ import { cn } from "@/utils/cn";
 import { Input } from "./ui/input";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
-import { queryClient } from "@/main";
 import { FC, useRef, useState } from "react";
 import { SpinnerIcon } from "./ui/spinner-icon";
-import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { CameraIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { UserWithoutPasswordDTO } from "../../../src/schemas/UserSchema";
+import { usePatchMyUserImage } from "@/services/user/usePatchMyUserImage";
+import { useDeleteMyUserImage } from "@/services/user/useDeleteMyUserImage";
 import {
     Dialog,
     DialogTitle,
@@ -49,55 +49,21 @@ export const EditableAvatar: FC<EditableAvatarProps> = ({
     const {
         mutate: patchMyUserImage,
         isPending: isPatchingMyUserImagePending,
-    } = useMutation({
-        mutationKey: ["PATCH-MY-USER-IMAGE"],
-        mutationFn: async (file: File) => {
-            const formData = new FormData();
-            formData.set("file", file, file.name);
-
-            return HTTPManager.patch("users/mine/image", formData, {
-                headers: {
-                    accept: "application/json",
-                    "Accept-Language": "en-US,en;q=0.8",
-                    "Content-Type": "multipart/form-data",
-                },
-            })
-                .then((response) => response.data)
-                .then((_data) => {
-                    HandleReset();
-                    toast.success("Successfully updated image!");
-                    queryClient.invalidateQueries({
-                        queryKey: ["GET-MY-USER"],
-                    });
-                })
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                );
+    } = usePatchMyUserImage({
+        onSuccess: () => {
+            HandleReset();
+            toast.success("Successfully updated image!");
         },
     });
 
     const {
         mutate: deleteMyUserImage,
         isPending: isDeletingMyUserImagePending,
-    } = useMutation({
-        mutationKey: ["DELETE-MY-USER-IMAGE"],
-        mutationFn: async () =>
-            HTTPManager.delete("users/mine/image")
-                .then((response) => response.data)
-                .then((_data) => {
-                    HandleReset();
-                    toast.success("Successfully deleted image!");
-                    queryClient.invalidateQueries({
-                        queryKey: ["GET-MY-USER"],
-                    });
-                })
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                ),
+    } = useDeleteMyUserImage({
+        onSuccess: () => {
+            HandleReset();
+            toast.success("Successfully deleted image!");
+        },
     });
 
     const isPending =
