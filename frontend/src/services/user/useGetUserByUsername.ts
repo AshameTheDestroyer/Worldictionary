@@ -1,12 +1,15 @@
 import { HTTPManager } from "@/managers/HTTPManager";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { UserWithoutPasswordSchema } from "../../../../src/schemas/UserSchema";
+import {
+    UserWithoutPasswordDTO,
+    UserWithoutPasswordSchema,
+} from "../../../../src/schemas/UserSchema";
 
 export const GET_USER_BY_USERNAME_KEY = "GET-USER-BY-USERNAME";
 
 export const useGetUserByUsername = (
     username: string,
-    options?: Partial<UseQueryOptions>
+    options?: Partial<UseQueryOptions<any, any, UserWithoutPasswordDTO>>
 ) =>
     useQuery({
         ...options,
