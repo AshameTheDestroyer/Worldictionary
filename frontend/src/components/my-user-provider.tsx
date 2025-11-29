@@ -1,14 +1,13 @@
 import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-    UserWithoutPasswordDTO,
-    UserWithoutPasswordSchema,
-} from "../../../src/schemas/UserSchema";
+import { useGetMyUser } from "@/services/user/useGetMyUser";
+import { UserWithoutPasswordDTO } from "../../../src/schemas/UserSchema";
 import {
     FC,
     useState,
+    useEffect,
     useContext,
     createContext,
     PropsWithChildren,
@@ -72,35 +71,16 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
                     ),
         });
 
-    const { isLoading: isGettingMyUserLoading } = useQuery({
-        queryKey: ["GET-MY-USER", state.token],
-        enabled: state.token != null,
-        queryFn: () =>
-            HTTPManager.get("users/mine")
-                .then((response) => response.data)
-                .then(UserWithoutPasswordSchema.parse)
-                .then((data) => ({
-                    ...data,
-                    birthday:
-                        data.birthday != null
-                            ? new Date(data.birthday)
-                            : undefined,
-                }))
-                .then(
-                    (data) => (
-                        setState((state) => ({
-                            ...state,
-                            myUser: data,
-                        })),
-                        data
-                    )
-                )
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                ),
-    });
+    const { data: myUser, isLoading: isGettingMyUserLoading } = useGetMyUser(
+        state.token
+    );
+
+    useEffect(() => {
+        setState((state) => ({
+            ...state,
+            myUser,
+        }));
+    }, [myUser]);
 
     return (
         <MyUserContext.Provider

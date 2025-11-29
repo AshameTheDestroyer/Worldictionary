@@ -1,4 +1,5 @@
 import { queryClient } from "@/main";
+import { GET_MY_USER_KEY } from "./useGetMyUser";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { GET_USER_BY_USERNAME_KEY } from "./useGetUserByUsername";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
@@ -24,7 +25,7 @@ export const usePatchMyUser = (
                 .then(UserWithoutPasswordSchema.parse)
                 .then((user) => {
                     queryClient.invalidateQueries({
-                        queryKey: ["GET-MY-USER"],
+                        queryKey: [GET_MY_USER_KEY],
                     });
                     queryClient.invalidateQueries({
                         queryKey: [GET_USER_BY_USERNAME_KEY],
