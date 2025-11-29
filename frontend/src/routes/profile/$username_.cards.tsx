@@ -1,5 +1,7 @@
+import { PlusIcon } from "lucide-react";
 import { Page } from "@/components/shared/page";
 import { useMyUser } from "@/contexts/my-user-provider";
+import { ActionButton } from "@/components/shared/action-button";
 import { StateDisplay } from "@/components/shared/state-display";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
@@ -43,6 +45,12 @@ function RouteComponent() {
                     ? "My Cards"
                     : `${user["first-name"]}'s Cards`}
             </h1>
+
+            {myUser.username.slice(1) == username && (
+                <ActionButton>
+                    <PlusIcon />
+                </ActionButton>
+            )}
         </Page>
     );
 }
