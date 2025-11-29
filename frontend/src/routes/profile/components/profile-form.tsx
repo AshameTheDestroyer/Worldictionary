@@ -1,23 +1,19 @@
-import z from "zod";
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
-import { queryClient } from "@/main";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/date-picker";
 import { SpinnerIcon } from "@/components/ui/spinner-icon";
+import { usePatchMyUser } from "@/services/user/usePatchMyUser";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";
-import { GET_USER_BY_USERNAME_KEY } from "@/services/user/useGetUserByUsername";
 import {
     Gender,
-    UserSchema,
+    PatchableUserDTO,
+    PatchableUserSchema,
     UserWithoutPasswordDTO,
-    UserWithoutPasswordSchema,
 } from "../../../../../src/schemas/UserSchema";
 import {
     InputGroup,
@@ -39,14 +35,6 @@ import {
     FormControl,
 } from "@/components/ui/form";
 
-export const ProfileFormSchema = UserSchema.omit({
-    role: true,
-    email: true,
-    password: true,
-}).partial();
-
-export type ProfileFormDTO = z.infer<typeof ProfileFormSchema>;
-
 export type ProfileFormProps = {
     user: UserWithoutPasswordDTO;
 };
@@ -55,7 +43,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
     const Navigate = useNavigate();
 
     const form = useForm({
-        resolver: zodResolver(ProfileFormSchema),
+        resolver: zodResolver(PatchableUserSchema),
         defaultValues: {
             gender: undefined,
             birthday: undefined,
@@ -65,39 +53,24 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         },
     });
 
-    const { mutate, isPending } = useMutation({
-        mutationKey: ["PATCH-MY-USER"],
-        mutationFn: (data: ProfileFormDTO) =>
-            HTTPManager.patch("users/mine", data)
-                .then((response) => response.data)
-                .then(UserWithoutPasswordSchema.parse)
-                .then((updatedUser) => {
-                    toast.success("Successfully edited profile information!");
+    const { mutate, isPending } = usePatchMyUser({
+        onSuccess: (updatedUser) => {
+            toast.success("Successfully edited profile information!");
 
-                    queryClient.invalidateQueries({
-                        queryKey: ["GET-MY-USER"],
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey: [GET_USER_BY_USERNAME_KEY],
-                    });
+            form.reset();
 
-                    form.reset();
-
-                    if (updatedUser.username == user.username) return;
-                    Navigate({
-                        to: "/profile/$username/edit",
-                        params: { username: updatedUser.username.slice(1) },
-                    });
-                })
-                .catch((error) =>
-                    toast.error(
-                        error?.response?.data?.message ?? error?.message
-                    )
-                ),
+            if (updatedUser.username == user.username) return;
+            Navigate({
+                to: "/profile/$username/edit",
+                params: { username: updatedUser.username.slice(1) },
+            });
+        },
+        onError: (error) =>
+            toast.error(error?.response?.data?.message ?? error?.message),
     });
 
-    function HandleSubmit(data: ProfileFormDTO) {
-        mutate(
+    function HandleSubmit(data: PatchableUserDTO) {
+        const user = PatchableUserSchema.parse(
             Object.entries(data).reduce(
                 (accumulator, [key, value]) =>
                     value == null
@@ -106,6 +79,8 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                 {}
             )
         );
+
+        mutate(user);
     }
 
     return (

@@ -35,7 +35,14 @@ export const UserSchema = z.object({
         .optional(),
 });
 
+export const PatchableUserSchema = UserSchema.omit({
+    role: true,
+    email: true,
+    password: true,
+}).partial();
+
 export const UserWithoutPasswordSchema = UserSchema.omit({ password: true });
 
 export type UserDTO = z.infer<typeof UserSchema>;
+export type PatchableUserDTO = z.infer<typeof PatchableUserSchema>;
 export type UserWithoutPasswordDTO = z.infer<typeof UserWithoutPasswordSchema>;
