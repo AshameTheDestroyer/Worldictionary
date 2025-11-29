@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { CopyableText } from "@/components/shared/copyable-text";
 import { useMyUser } from "@/contexts/my-user-provider";
 import { EditableAvatar } from "@/components/editable-avatar";
+import { CopyableText } from "@/components/shared/copyable-text";
 import { Link, Navigate, useLocation } from "@tanstack/react-router";
 import {
     Role,
@@ -92,7 +92,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
                     )}
                 </div>
 
-                {!pathname.endsWith("/edit") &&
+                {!pathname.endsWith("/settings") &&
                     myUser.username == user.username && (
                         <Tooltip>
                             <TooltipTrigger
@@ -100,7 +100,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
                                 asChild
                             >
                                 <Link
-                                    to="/profile/$username/edit"
+                                    to="/profile/$username/settings"
                                     params={{
                                         username: user.username.slice(1),
                                     }}
@@ -108,7 +108,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
                                     <SettingsIcon className="size-9!" />
                                 </Link>
                             </TooltipTrigger>
-                            <TooltipContent>Edit Profile</TooltipContent>
+                            <TooltipContent>Settings</TooltipContent>
                         </Tooltip>
                     )}
             </div>

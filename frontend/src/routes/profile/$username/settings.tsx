@@ -1,15 +1,15 @@
-import { ProfileForm } from "../components/profile-form";
 import { useMyUser } from "@/contexts/my-user-provider";
+import { ProfileForm } from "../components/profile-form";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const Route = createFileRoute("/profile/$username/edit")({
+export const Route = createFileRoute("/profile/$username/settings")({
     component: RouteComponent,
 });
 
 function RouteComponent() {
-    const { username } = useParams({ from: "/profile/$username/edit" });
+    const { username } = useParams({ from: "/profile/$username/settings" });
     const { myUser, token } = useMyUser();
 
     const userQuery = useGetUserByUsername(username);
@@ -22,7 +22,7 @@ function RouteComponent() {
     if (myUser.username != user.username) {
         return (
             <Navigate
-                to="/profile/$username/edit"
+                to="/profile/$username/settings"
                 params={{ username: myUser.username.slice(1) }}
             />
         );

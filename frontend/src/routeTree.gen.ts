@@ -16,7 +16,7 @@ import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as ProfileUsernameRouteRouteImport } from './routes/profile/$username/route'
 import { Route as ProfileUsernameIndexRouteImport } from './routes/profile/$username/index'
 import { Route as ProfileUsernameCardsRouteImport } from './routes/profile/$username_.cards'
-import { Route as ProfileUsernameEditRouteImport } from './routes/profile/$username/edit'
+import { Route as ProfileUsernameSettingsRouteImport } from './routes/profile/$username/settings'
 
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
@@ -53,9 +53,9 @@ const ProfileUsernameCardsRoute = ProfileUsernameCardsRouteImport.update({
   path: '/profile/$username/cards',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfileUsernameEditRoute = ProfileUsernameEditRouteImport.update({
-  id: '/edit',
-  path: '/edit',
+const ProfileUsernameSettingsRoute = ProfileUsernameSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => ProfileUsernameRouteRoute,
 } as any)
 
@@ -65,7 +65,7 @@ export interface FileRoutesByFullPath {
   '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/profile': typeof ProfileIndexRoute
   '/registration': typeof RegistrationIndexRoute
-  '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username/settings': typeof ProfileUsernameSettingsRoute
   '/profile/$username/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username/': typeof ProfileUsernameIndexRoute
 }
@@ -74,7 +74,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/profile': typeof ProfileIndexRoute
   '/registration': typeof RegistrationIndexRoute
-  '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username/settings': typeof ProfileUsernameSettingsRoute
   '/profile/$username/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username': typeof ProfileUsernameIndexRoute
 }
@@ -85,7 +85,7 @@ export interface FileRoutesById {
   '/profile/$username': typeof ProfileUsernameRouteRouteWithChildren
   '/profile/': typeof ProfileIndexRoute
   '/registration/': typeof RegistrationIndexRoute
-  '/profile/$username/edit': typeof ProfileUsernameEditRoute
+  '/profile/$username/settings': typeof ProfileUsernameSettingsRoute
   '/profile/$username_/cards': typeof ProfileUsernameCardsRoute
   '/profile/$username/': typeof ProfileUsernameIndexRoute
 }
@@ -97,7 +97,7 @@ export interface FileRouteTypes {
     | '/profile/$username'
     | '/profile'
     | '/registration'
-    | '/profile/$username/edit'
+    | '/profile/$username/settings'
     | '/profile/$username/cards'
     | '/profile/$username/'
   fileRoutesByTo: FileRoutesByTo
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/profile'
     | '/registration'
-    | '/profile/$username/edit'
+    | '/profile/$username/settings'
     | '/profile/$username/cards'
     | '/profile/$username'
   id:
@@ -116,7 +116,7 @@ export interface FileRouteTypes {
     | '/profile/$username'
     | '/profile/'
     | '/registration/'
-    | '/profile/$username/edit'
+    | '/profile/$username/settings'
     | '/profile/$username_/cards'
     | '/profile/$username/'
   fileRoutesById: FileRoutesById
@@ -181,23 +181,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileUsernameCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile/$username/edit': {
-      id: '/profile/$username/edit'
-      path: '/edit'
-      fullPath: '/profile/$username/edit'
-      preLoaderRoute: typeof ProfileUsernameEditRouteImport
+    '/profile/$username/settings': {
+      id: '/profile/$username/settings'
+      path: '/settings'
+      fullPath: '/profile/$username/settings'
+      preLoaderRoute: typeof ProfileUsernameSettingsRouteImport
       parentRoute: typeof ProfileUsernameRouteRoute
     }
   }
 }
 
 interface ProfileUsernameRouteRouteChildren {
-  ProfileUsernameEditRoute: typeof ProfileUsernameEditRoute
+  ProfileUsernameSettingsRoute: typeof ProfileUsernameSettingsRoute
   ProfileUsernameIndexRoute: typeof ProfileUsernameIndexRoute
 }
 
 const ProfileUsernameRouteRouteChildren: ProfileUsernameRouteRouteChildren = {
-  ProfileUsernameEditRoute: ProfileUsernameEditRoute,
+  ProfileUsernameSettingsRoute: ProfileUsernameSettingsRoute,
   ProfileUsernameIndexRoute: ProfileUsernameIndexRoute,
 }
 
