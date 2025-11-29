@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "./ui/button";
-import { ModeToggle } from "./shared/mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
-import { useMyUser } from "../contexts/my-user-provider";
+import { ModeToggle } from "./shared/mode-toggle";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { HistoryBreadcrumb } from "./shared/history-breadcrumb";
+import { useMyUser } from "../contexts/my-user-provider";
 import { Link, useLocation } from "@tanstack/react-router";
+import { HistoryBreadcrumb } from "./shared/history-breadcrumb";
 import { QuickActionsDropdown } from "./quick-actions-dropdown";
 
 import WorldictionaryIcon from "@/assets/icons/worldictionary.svg?react";
@@ -41,22 +41,18 @@ export const Header: FC<HeaderProps> = ({ id, className }) => {
                 <h1 className="text-3xl font-bold">Worldictionary</h1>
             </Link>
             <div className="flex gap-4 flex-1 place-content-end">
-                {!pathname.startsWith("/registration") &&
-                    (token == null ? (
-                        <div className="flex gap-2">
-                            <Link
-                                to="/registration"
-                                search={{ mode: "signup" }}
-                            >
-                                <Button variant="secondary">Sign up</Button>
-                            </Link>
-                            <Link to="/registration" search={{ mode: "login" }}>
-                                <Button>Login</Button>
-                            </Link>
-                        </div>
-                    ) : (
-                        <QuickActionsDropdown />
-                    ))}
+                {token == null ? (
+                    <div className="flex gap-2">
+                        <Link to="/registration" search={{ mode: "signup" }}>
+                            <Button variant="secondary">Sign up</Button>
+                        </Link>
+                        <Link to="/registration" search={{ mode: "login" }}>
+                            <Button>Login</Button>
+                        </Link>
+                    </div>
+                ) : (
+                    <QuickActionsDropdown />
+                )}
                 <ModeToggle />
             </div>
         </header>
