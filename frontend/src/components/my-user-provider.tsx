@@ -1,8 +1,7 @@
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { HTTPManager } from "@/managers/HTTPManager";
 import { useGetMyUser } from "@/services/user/useGetMyUser";
+import { useLogout } from "@/services/registration/useLogout";
 import { UserWithoutPasswordDTO } from "../../../src/schemas/UserSchema";
 import {
     FC,
@@ -43,33 +42,22 @@ export const MyUserProvider: FC<MyUserProviderProps> = ({ children }) => {
 
     const Navigate = useNavigate();
 
-    const { mutate: mutateLogout, isPending: isLoggingOutPending } =
-        useMutation({
-            mutationKey: ["LOGOUT"],
-            mutationFn: () =>
-                HTTPManager.post("registration/logout")
-                    .then((response) => response.data)
-                    .then((_data) => {
-                        localStorage.removeItem("token");
-                        toast.success("Successfully logged out!");
+    const { mutate: mutateLogout, isPending: isLoggingOutPending } = useLogout({
+        onSuccess: () => {
+            toast.success("Successfully logged out!");
 
-                        setState((state) => ({
-                            ...state,
-                            token: undefined,
-                            myUser: undefined,
-                        }));
+            setState((state) => ({
+                ...state,
+                token: undefined,
+                myUser: undefined,
+            }));
 
-                        Navigate({
-                            to: "/registration",
-                            search: { mode: "login" },
-                        });
-                    })
-                    .catch((error) =>
-                        toast.error(
-                            error?.response?.data?.message ?? error?.message
-                        )
-                    ),
-        });
+            Navigate({
+                to: "/registration",
+                search: { mode: "login" },
+            });
+        },
+    });
 
     const { data: myUser, isLoading: isGettingMyUserLoading } = useGetMyUser(
         state.token
