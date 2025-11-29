@@ -6,15 +6,18 @@ import { queryClient } from "@/main";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/date-picker";
 import { SpinnerIcon } from "@/components/ui/spinner-icon";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";
+import { GET_USER_BY_USERNAME_KEY } from "@/services/user/useGetUserByUsername";
 import {
     Gender,
     UserSchema,
     UserWithoutPasswordDTO,
+    UserWithoutPasswordSchema,
 } from "../../../../../src/schemas/UserSchema";
 import {
     InputGroup,
@@ -49,6 +52,8 @@ export type ProfileFormProps = {
 };
 
 export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
+    const Navigate = useNavigate();
+
     const form = useForm({
         resolver: zodResolver(ProfileFormSchema),
         defaultValues: {
@@ -65,12 +70,24 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         mutationFn: (data: ProfileFormDTO) =>
             HTTPManager.patch("users/mine", data)
                 .then((response) => response.data)
-                .then((_data) => {
+                .then(UserWithoutPasswordSchema.parse)
+                .then((updatedUser) => {
                     toast.success("Successfully edited profile information!");
+
                     queryClient.invalidateQueries({
                         queryKey: ["GET-MY-USER"],
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: [GET_USER_BY_USERNAME_KEY],
+                    });
+
                     form.reset();
+
+                    if (updatedUser.username == user.username) return;
+                    Navigate({
+                        to: "/profile/$username/edit",
+                        params: { username: updatedUser.username.slice(1) },
+                    });
                 })
                 .catch((error) =>
                     toast.error(

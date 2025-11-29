@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
+import { createFileRoute } from "@tanstack/react-router";
 import {
     Card,
     CardTitle,
@@ -15,11 +14,6 @@ export const Route = createFileRoute("/profile/$username/")({
 });
 
 function RouteComponent() {
-    const { username } = useParams({ from: "/profile/$username" });
-
-    const userQuery = useGetUserByUsername(username);
-    const user = userQuery.data!;
-
     return (
         <Card className="max-w-[30rem]">
             <CardHeader>
