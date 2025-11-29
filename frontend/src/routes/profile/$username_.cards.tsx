@@ -1,6 +1,6 @@
-import { Page } from "@/components/page";
-import { useMyUser } from "@/components/my-user-provider";
-import { StateDisplay } from "@/components/state-display";
+import { Page } from "@/components/shared/page";
+import { useMyUser } from "@/contexts/my-user-provider";
+import { StateDisplay } from "@/components/shared/state-display";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
 

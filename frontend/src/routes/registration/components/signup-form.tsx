@@ -1,31 +1,37 @@
 import * as z from "zod";
 import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
-import { Button } from "./ui/button";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Separator } from "./ui/separator";
-import { DatePicker } from "./date-picker";
-import { SpinnerIcon } from "./ui/spinner-icon";
 import { useNavigate } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Gender } from "../../../src/schemas/UserSchema";
+import { Button } from "../../../components/ui/button";
+import { Separator } from "../../../components/ui/separator";
+import { DatePicker } from "../../../components/shared/date-picker";
 import { useSignup } from "@/services/registration/useSignup";
-import { SignupSchema } from "../../../src/schemas/SignupSchema";
-import { Form, FormItem, FormField, FormLabel, FormControl } from "./ui/form";
+import { Gender } from "../../../../../src/schemas/UserSchema";
+import { SpinnerIcon } from "../../../components/ui/spinner-icon";
+import { SignupSchema } from "../../../../../src/schemas/SignupSchema";
+import {
+    Form,
+    FormItem,
+    FormField,
+    FormLabel,
+    FormControl,
+} from "../../../components/ui/form";
 import {
     DropdownMenu,
     DropdownMenuItem,
     DropdownMenuTrigger,
     DropdownMenuContent,
-} from "./ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 import {
     InputGroup,
     InputGroupText,
     InputGroupAddon,
     InputGroupInput,
     InputGroupButton,
-} from "./ui/input-group";
+} from "../../../components/ui/input-group";
 import {
     TagIcon,
     EyeIcon,

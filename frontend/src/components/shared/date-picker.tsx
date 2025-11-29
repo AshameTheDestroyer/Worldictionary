@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { format } from "date-fns";
-import { Button } from "./ui/button";
-import { Calendar } from "./ui/calendar";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 import { CalendarIcon } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export type DatePickerProps = {
     date: Date | undefined;

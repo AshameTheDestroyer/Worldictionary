@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { CopyableText } from "@/components/copyable-text";
-import { useMyUser } from "@/components/my-user-provider";
+import { CopyableText } from "@/components/shared/copyable-text";
+import { useMyUser } from "@/contexts/my-user-provider";
 import { EditableAvatar } from "@/components/editable-avatar";
 import { Link, Navigate, useLocation } from "@tanstack/react-router";
 import {

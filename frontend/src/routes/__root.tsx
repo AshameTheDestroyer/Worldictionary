@@ -1,10 +1,10 @@
 import { Toaster } from "react-hot-toast";
 import { Header } from "@/components/header";
-import { AppSidebar } from "@/components/app-sidebar";
-import { useTheme } from "@/components/theme-provider";
+import { AppSidebar } from "@/components/shared/app-sidebar";
+import { useTheme } from "@/contexts/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { MyUserProvider } from "@/components/my-user-provider";
-import { useScreenSize } from "@/components/screen-size-provider";
+import { MyUserProvider } from "@/contexts/my-user-provider";
+import { useScreenSize } from "@/contexts/screen-size-provider";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
 

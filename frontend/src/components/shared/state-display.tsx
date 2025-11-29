@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Link } from "@tanstack/react-router";
-import { SpinnerIcon } from "./ui/spinner-icon";
+import { SpinnerIcon } from "../ui/spinner-icon";
 import { CloudOffIcon, SearchXIcon } from "lucide-react";
 
 export type StateDisplayProps<T> = {

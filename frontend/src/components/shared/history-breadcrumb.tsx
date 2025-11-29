@@ -9,7 +9,7 @@ import {
     BreadcrumbPage,
     BreadcrumbEllipsis,
     BreadcrumbSeparator,
-} from "./ui/breadcrumb";
+} from "../ui/breadcrumb";
 import {
     DropdownMenu,
     DropdownMenuItem,

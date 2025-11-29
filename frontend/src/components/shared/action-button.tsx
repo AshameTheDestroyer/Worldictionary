@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { cn } from "@/utils/cn";
-import { Button, buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { VariantProps } from "class-variance-authority";
 
 export type ActionButtonProps = React.ComponentProps<"button"> &

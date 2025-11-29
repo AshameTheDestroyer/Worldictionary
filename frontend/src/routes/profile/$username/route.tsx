@@ -1,6 +1,6 @@
-import { Page } from "@/components/page";
+import { Page } from "@/components/shared/page";
 import { Separator } from "@/components/ui/separator";
-import { StateDisplay } from "@/components/state-display";
+import { StateDisplay } from "@/components/shared/state-display";
 import { ProfileHeader } from "../components/profile-header";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
 import { Outlet, useParams, createFileRoute } from "@tanstack/react-router";

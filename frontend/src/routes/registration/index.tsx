@@ -1,8 +1,8 @@
 import z from "zod/v3";
-import { LoginForm } from "@/components/login-form";
 import { Separator } from "@/components/ui/separator";
-import { SignupForm } from "@/components/signup-form";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { LoginForm } from "@/routes/registration/components/login-form";
+import { SignupForm } from "@/routes/registration/components/signup-form";
 import {
     Card,
     CardTitle,
@@ -15,7 +15,7 @@ const RegistrationSearchSchema = z.object({
     mode: z.enum(["signup", "login"]).default("signup"),
 });
 
-export const Route = createFileRoute("/registration")({
+export const Route = createFileRoute("/registration/")({
     component: RouteComponent,
     validateSearch: RegistrationSearchSchema,
 });

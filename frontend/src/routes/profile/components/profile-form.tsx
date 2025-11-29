@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@/components/date-picker";
+import { DatePicker } from "@/components/shared/date-picker";
 import { SpinnerIcon } from "@/components/ui/spinner-icon";
 import { usePatchMyUser } from "@/services/user/usePatchMyUser";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";

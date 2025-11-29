@@ -1,9 +1,9 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
-import { ThemeProvider } from "./components/theme-provider";
+import { ThemeProvider } from "./contexts/theme-provider";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { ScreenSizeProvider } from "./components/screen-size-provider";
+import { ScreenSizeProvider } from "./contexts/screen-size-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./global.css";

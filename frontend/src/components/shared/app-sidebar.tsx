@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { cn } from "@/utils/cn";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 import { Link } from "@tanstack/react-router";
-import { useMyUser } from "./my-user-provider";
+import { useMyUser } from "../../contexts/my-user-provider";
 import { CopyableText } from "./copyable-text";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { HomeIcon, UserRoundIcon } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
     Sidebar,
     useSidebar,
@@ -16,7 +16,7 @@ import {
     SidebarHeader,
     SidebarContent,
     SidebarTrigger,
-} from "./ui/sidebar";
+} from "../ui/sidebar";
 
 export const AppSidebar: FC = () => {
     const { myUser } = useMyUser();

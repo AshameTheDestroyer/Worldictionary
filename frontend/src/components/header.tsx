@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "./ui/button";
-import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "./shared/mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
-import { useMyUser } from "./my-user-provider";
+import { useMyUser } from "../contexts/my-user-provider";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { HistoryBreadcrumb } from "./history-breadcrumb";
+import { HistoryBreadcrumb } from "./shared/history-breadcrumb";
 import { Link, useLocation } from "@tanstack/react-router";
 import { QuickActionsDropdown } from "./quick-actions-dropdown";
 

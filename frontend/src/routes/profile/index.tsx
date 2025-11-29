@@ -1,4 +1,4 @@
-import { useMyUser } from "@/components/my-user-provider";
+import { useMyUser } from "@/contexts/my-user-provider";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/profile/")({

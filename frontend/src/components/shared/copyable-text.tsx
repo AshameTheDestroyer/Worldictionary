@@ -2,7 +2,7 @@ import { FC } from "react";
 import { cn } from "@/utils/cn";
 import { CopyIcon } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export type CopyableTextProps = {
     id?: string;

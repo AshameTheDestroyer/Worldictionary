@@ -1,5 +1,5 @@
 import { ProfileForm } from "../components/profile-form";
-import { useMyUser } from "@/components/my-user-provider";
+import { useMyUser } from "@/contexts/my-user-provider";
 import { useGetUserByUsername } from "@/services/user/useGetUserByUsername";
 import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

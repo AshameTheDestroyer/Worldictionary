@@ -1,20 +1,26 @@
 import toast from "react-hot-toast";
-import { Button } from "./ui/button";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMyUser } from "./my-user-provider";
-import { SpinnerIcon } from "./ui/spinner-icon";
 import { useNavigate } from "@tanstack/react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "../../../components/ui/button";
 import { useLogin } from "@/services/registration/useLogin";
-import { LoginDTO, LoginSchema } from "../../../src/schemas/LoginSchema";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import { useMyUser } from "../../../contexts/my-user-provider";
+import { SpinnerIcon } from "../../../components/ui/spinner-icon";
+import { LoginDTO, LoginSchema } from "../../../../../src/schemas/LoginSchema";
+import {
+    Form,
+    FormItem,
+    FormLabel,
+    FormField,
+    FormControl,
+} from "../../../components/ui/form";
 import {
     InputGroup,
     InputGroupInput,
     InputGroupAddon,
     InputGroupButton,
-} from "./ui/input-group";
+} from "../../../components/ui/input-group";
 import {
     EyeIcon,
     LockIcon,
