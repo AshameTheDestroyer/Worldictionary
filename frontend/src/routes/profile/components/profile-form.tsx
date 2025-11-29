@@ -65,8 +65,6 @@ export const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
                 params: { username: updatedUser.username.slice(1) },
             });
         },
-        onError: (error) =>
-            toast.error(error?.response?.data?.message ?? error?.message),
     });
 
     function HandleSubmit(data: PatchableUserDTO) {

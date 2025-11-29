@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./components/theme-provider";
@@ -13,7 +14,17 @@ declare module "@tanstack/react-router" {
     }
 }
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5,
+        },
+        mutations: {
+            onError: (error: any) =>
+                toast.error(error?.response?.data?.message ?? error?.message),
+        },
+    },
+});
 
 const router = createRouter({ routeTree });
 const ROOT_ELEMENT = document.getElementById("root")!;
