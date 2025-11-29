@@ -2,33 +2,39 @@ import z from "zod";
 import { FC } from "react";
 import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
-import { Button } from "./ui/button";
 import { queryClient } from "@/main";
 import { useForm } from "react-hook-form";
-import { DatePicker } from "./date-picker";
-import { SpinnerIcon } from "./ui/spinner-icon";
+import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { HTTPManager } from "@/managers/HTTPManager";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DatePicker } from "@/components/date-picker";
+import { SpinnerIcon } from "@/components/ui/spinner-icon";
 import { TagIcon, TagsIcon, UserIcon, VenusAndMarsIcon } from "lucide-react";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import {
     Gender,
     UserSchema,
     UserWithoutPasswordDTO,
-} from "../../../src/schemas/UserSchema";
+} from "../../../../../src/schemas/UserSchema";
 import {
     InputGroup,
     InputGroupText,
     InputGroupAddon,
     InputGroupInput,
-} from "./ui/input-group";
+} from "@/components/ui/input-group";
 import {
     DropdownMenu,
     DropdownMenuItem,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@radix-ui/react-dropdown-menu";
+import {
+    Form,
+    FormItem,
+    FormLabel,
+    FormField,
+    FormControl,
+} from "@/components/ui/form";
 
 export const ProfileFormSchema = UserSchema.omit({
     role: true,
