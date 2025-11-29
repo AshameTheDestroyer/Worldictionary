@@ -35,24 +35,24 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
                 user={user}
             />
 
-            <div className="relative pr-8 flex flex-col gap-6">
-                <div className="space-y-2">
-                    <h2 className="font-bold text-4xl">
-                        {user["first-name"]} {user["last-name"]}
-                    </h2>
+            <div className="relative pr-12 flex flex-col gap-6">
+                <h2 className="font-bold text-4xl">
+                    {user["first-name"]} {user["last-name"]}
+                </h2>
+
+                <div>
                     <CopyableText
                         className="text-xl"
                         text={user.username}
                         tooltip="Copy Username"
                         message="Username's been copied."
                     />
+                    <CopyableText
+                        text={user.email}
+                        tooltip="Copy Email"
+                        message="Email's been copied."
+                    />
                 </div>
-
-                <CopyableText
-                    text={user.email}
-                    tooltip="Copy Email"
-                    message="Email's been copied."
-                />
 
                 <div className="flex gap-2 flex-wrap">
                     {user.role == Role.admin && (
